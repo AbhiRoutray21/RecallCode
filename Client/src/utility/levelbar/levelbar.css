@@ -1,0 +1,94 @@
+.levelbar {
+  position: relative;
+  width: 95%;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  color: var(--text);
+  /* border: 1px solid white; */
+  margin: 0px auto;
+}
+
+/* base range styling */
+.range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--track);
+  outline: none;
+  cursor: pointer;
+  transition: background 120ms linear;
+  /* border: 1px solid white; */
+}
+
+/* webkit track/ thumb */
+.range::-webkit-slider-runnable-track {
+  height: 10px;
+  border-radius: 999px;
+  background: transparent; /* we control via inline gradient */
+}
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--thumb);
+  border: 2px solid var(--accent);
+  margin-top: -4px; /* center thumb vertically */
+  /* box-shadow: 0 4px 12px rgba(124,58,237,.4); */
+  cursor: pointer;
+}
+
+/* firefox */
+.range::-moz-range-track {
+  height: 10px;
+  border-radius: 999px;
+  background: transparent;
+}
+.range::-moz-range-progress {
+  background: var(--accent);
+  height: 10px;
+  border-radius: 999px;
+}
+.range::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--thumb);
+  border: 2px solid var(--accent);
+  /* box-shadow: 0 4px 12px rgba(124,58,237,.4); */
+  cursor: pointer;
+}
+
+/* ticks container */
+.ticks {
+  position: relative;
+  margin: 0px 5px;
+  height: 8px;
+  /* border: 1px solid white; */
+}
+
+/* each tick is a small button so it's keyboard/mouse friendly */
+.tick {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: center;
+  color: var(--tick);
+  font-size: 12px;
+}
+.tick .label {
+  display: block;
+  transform: translateY(0);
+}
+
+/* active/selected tick */
+.tick.active,
+.tick:focus-visible {
+  color: var(--text);
+}

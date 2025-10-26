@@ -1,0 +1,167 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* theme.css */
+/* ===== Light Theme ===== */
+:root[data-theme="Light"] {
+  /* Palette */
+  --light-black-100: #121212;
+  --light-black-200: #f3f3f3;
+  --light-black-300: #ffffff;
+  --light-black-400: #e8e8e8;
+  --light-black-500: #2e2e2e;
+  --light-black-600: #ffffff;
+  --light-black-700: #404040;
+  --light-black-800: #b3b3b3;
+  --light-black-900: #5554542a;
+  --light-black-1000: #cecece;
+  --light-black-1001: #6d6d6d;
+  --light-black-1100: #cccccc;
+  --light-black-1101: #b3b3b381;
+  --light-black-1102: #8f8f8fc5;
+  --light-black-1200: #cbcbcbb9;
+
+  /* UI Colors */
+  --bg-p-color: var(--light-black-300);
+  --bg-ssb-color: var(--light-black-400);
+  --bg-s-color: var(--light-black-200);
+  --bg-box-color: var( --light-black-600);
+  --box-border: rgba(77, 77, 77, 0.475);
+  --text-color: black;
+  --text-invert-color: white;
+  --subtext-color: #232323;
+  --onhover-color: var(--light-black-1100);
+  --onhover2-color: var(--light-black-900);
+  --onhover3-color: var(--light-black-800);
+  --border-color: var(--light-black-1101);
+  --borderbold-color: var(--light-black-1102);
+  --borderbold2-color: #8f8f8fc5;
+  --onactive-color: var(--light-black-1200);
+  --scrollbar-color: var(--light-black-1000);
+  --scrollbar-hover: var(--light-black-1001);
+  --blur-background: rgba(255, 255, 255, 0.542);
+  --avatar-color: #7c7cff;
+  --skeleton-bg-color: #2a2a2a18;
+  --shimmer-color-1: #33333334;
+  --shimmer-color-2: #d9d9d983;
+  --shimmer-color-3: #33333334;
+  --p-submit-color: #5d00ffa7;
+  --p-submit-hover: #8041eef1;
+  --cancle-color: #6e6a7453;
+  --cancle-hover: #68646e86;
+
+  /*--------levelBar---------*/
+  --accent: #40ef28;  /* filled segment */
+  --track: #64646441;   /* unfilled track */
+  --thumb: #ffffff;   /* handle color */
+  --tick: #757575;
+  --bg: #0e0e12;
+  --text: #000000;
+  /*--------progressBar---------*/
+  --progress-track: #64646441;
+  --progressRing-color: #64646441;
+}
+
+/* ===== Dark Theme ===== */
+:root[data-theme="Dark"] {
+  /* Palette */
+  --black-100: #121212;
+  --black-200: #1a1a1a;
+  --black-300: #242424;
+  --black-400: #2e2e2e;
+  --black-500: #2e2e2e;
+  --black-600: #3c3c3c;
+  --black-700: #404040;
+  --black-800: #696969;
+  --black-900: #424242;
+  --black-1000: #54545480;
+  --black-1001: #cacaca;
+  --black-1100: #76767627;
+  --black-1101: #ffffff48;
+  --black-1200: #76767632;
+
+
+  /* UI Colors */
+  --bg-p-color: var(--black-300);
+  --bg-ssb-color: var(--black-400);
+  --bg-s-color: var(--black-200);
+  --bg-box-color: var(--black-600);
+  --box-border: rgba(77, 77, 77, 0.475);
+  --text-color: white;
+  --text-invert-color: black;
+  --subtext-color: #cbcbcb;
+  --onhover-color: var(--black-1100);
+  --onhover2-color: var(--black-900);
+  --onhover3-color: var(--black-800);
+  --border-color: var(--black-1100);
+  --borderbold-color: var(--black-1101);
+  --borderbold2-color: #8f8f8f62;
+  --onactive-color: var(--black-1200);
+  --scrollbar-color: var(--black-1000);
+  --scrollbar-hover: var(--black-1001);
+  --blur-background: rgba(2, 2, 2, 0.542);
+  --avatar-color: #4949f7;
+  --skeleton-bg-color: #2a2a2a;
+  --shimmer-color-1: #333;
+  --shimmer-color-2: #444;
+  --shimmer-color-3: #333;
+  --p-submit-color: #7c3aed;
+  --p-submit-hover: #6c31d0;
+  --cancle-color: #68646e;
+  --cancle-hover: #59565f;
+
+  /*--------levelBar---------*/
+  --accent: #40ef28;  /* filled segment */
+  --track: #2a2a2f;   /* unfilled track */
+  --thumb: #ffffff;   /* handle color */
+  --tick: #aaaaaa;
+  --bg: #0e0e12;
+  --text: #f4f4f4;
+  /*--------progressBar---------*/
+  --progress-track: #585858;
+  --progressRing-color: #2a2a2a;
+}
+
+
+/*--------------------------------------*/
+.mainLayout-container{
+  background-color: var(--bg-p-color);
+  position: relative;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  /* border: 2px solid red; */
+  /* overflow: hidden; */
+}
+.mainLayout-content-container{
+  flex-grow: 1;
+  /* border: 2px solid orange; */
+  display:flex;
+  flex-direction: column;
+}
+/*--------------------------------------*/
+
+.Toastify__toast.Toastify__toast-theme--colored {
+  border-radius: 18px !important;
+  width: 420px !important;
+  color: #fff !important;
+  font-family: 'Montserrat', sans-serif;
+}  
+
+.Toastify__close-button > svg {
+  margin: 4px 5px 0 0;
+}
+
+@media (max-width: 412px) {
+.Toastify__toast.Toastify__toast-theme--colored {
+  border-radius: 18px !important;
+  width: 300px !important;
+  color: #fff !important;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+}
+}

@@ -1,0 +1,146 @@
+[
+  {
+    "language": "JavaScript",
+    "topics": [
+      "Variables & Scopes",
+      "Data Types & Type Conversion",
+      "Functions",
+      "Control Structures",
+      "Execution Context & Hoisting",
+      "This Keyword & Bind",
+      "Prototype & Prototypal Inheritance",
+      "Objects & Object Methods",
+      "Arrays & Array Methods",
+      "Event Loop & Asynchronous JS",
+      "Promises & Async/Await",
+      "Event Handling",
+      "DOM Manipulation",
+      "Event Modules",
+      "Error Handling",
+      "Rest Operator",
+      "Spread Operator",
+      "Destructuring",
+      "Higher-Order Functions & Callbacks",
+      "Closures & Lexical Scope"
+    ]
+  },
+  {
+    "language": "Python",
+    "topics": [
+      "Python Basics",
+      "Operators",
+      "Control Flow",
+      "Lists",
+      "Strings",
+      "Tuples",
+      "Dictionaries",
+      "Sets",
+      "Functions",
+      "Error Handling",
+      "File Handling",
+      "Modules & Packages",
+      "Object-Oriented Programming",
+      "Decorators & Generators",
+      "Comprehensions",
+      "Regular Expressions (Regex)",
+      "Data Handling",
+      "Concurrency",
+      "requests library",
+      "numpy"
+    ]
+  },
+  {
+    "language": "Java",
+    "topics": [
+      "Java Basics & Syntax",
+      "Control Flow",
+      "Methods & Parameters",
+      "Object-Oriented Programming",
+      "Encapsulation & Access Modifiers",
+      "Inheritance",
+      "Polymorphism",
+      "Abstraction",
+      "Strings & StringBuilder",
+      "Arrays & Collections Basics",
+      " Exception Handling ",
+      "File Handling & I/O Streams",
+      "Wrapper Classes & Autoboxing",
+      "Generics",
+      "Multithreading & Concurrency",
+      "Java 8 Features",
+      "Java Collections Framework",
+      "JVM & Memory Management",
+      "Annotations & Reflection API",
+      "Java Networking & Sockets"
+    ]
+  },
+  {
+    "language": "HTML5",
+    "topics": [
+      "HTML Structure & Doctype",
+      "Text Formatting & Headings",
+      "Lists & Links",
+      "Images & Multimedia Basics",
+      "Tables",
+      "Forms & Input Types",
+      "HTML5 Form Enhancements",
+      "Form Validation",
+      "Semantic Layout Tags",
+      "Inline vs Block Elements",
+      "Global Attributes",
+      "HTML5 Multimedia APIs",
+      "SVG (Scalable Vector Graphics)",
+      "Responsive HTML Basics"
+    ]
+  },
+  {
+    "language": "CSS3",
+    "topics": [
+      "Selectors",
+      "Combinators & Pseudo-classes",
+      "Pseudo-elements",
+      "CSS Specificity & Inheritance",
+      "CSS Box Model",
+      "Display & Visibility",
+      "Positioning",
+      "Float & Clear",
+      "Flexbox",
+      "CSS Grid",
+      "Media Queries",
+      "Units & Values",
+      "Responsive Images & Object-fit",
+      "Colors & Gradients",
+      "Transitions & Animations",
+      "Transforms",
+      "Shadows & Filters"
+    ]
+  },
+  {
+    "language": "C-language",
+    "topics": []
+  },
+  {
+    "language": "C++",
+    "topics": []
+  },
+  {
+    "language": "React",
+    "topics": []
+  },
+  {
+    "language": "Express",
+    "topics": []
+  },
+  {
+    "language": "MongoDB",
+    "topics": []
+  },
+  {
+    "language": "MySQL",
+    "topics": []
+  },
+  {
+    "language": "PHP",
+    "topics": []
+  }
+]

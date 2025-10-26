@@ -1,0 +1,103 @@
+/*----------Login Popup------------*/
+.hidden-loginPop-field{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: var(--blur-background);
+    backdrop-filter: blur(2px);
+}
+.loginPop-box{
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-color);
+    font-weight: 600;
+    position: absolute;
+    max-width: 390px;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-60%);
+    border: 1px solid var(--box-border);
+    border-radius: 25px;
+    background-color: var(--bg-box-color);
+    box-shadow: 0px 0px 10px rgba(13, 13, 13, 0.134);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 13px;
+    gap: 20px;
+}
+
+.loginPop-box span {
+    font-size: 22px;
+    /* border: 1px solid; */
+    text-align: center;
+    margin-bottom: -10px;
+}
+
+.loginPop-box p {
+    width: 85%;
+    font-size: 18px;
+    /* border: 1px solid; */
+    text-align: center;
+    opacity: 0.6;
+}
+
+.loginPop-buttons{
+    /* border: 1px solid white; */
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.loginPop-buttons button{
+    width: 170px;
+    height: 45px;
+    border: none;
+    border-radius: 99px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.loginPop-login{
+    background-color: var(--text-color);
+    border: 1px solid var(--text-color);
+    cursor: pointer;
+    color: var(--text-invert-color);
+}
+.loginPop-cancle{
+    background-color: transparent;
+    outline: 1px solid var(--borderbold-color);
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.loginPop-login:hover{
+    font-size: 17px;
+    cursor: pointer;
+    color: var(--text-invert-color);
+}
+.loginPop-cancle:hover{
+    background-color: rgba(70, 70, 70, 0.418);
+    outline: 1px solid var(--borderbold-color);
+    color: var(--text-color);
+    cursor: pointer;
+}
+.loginPop-cancle:active{
+    background-color: transparent;
+    outline: 1px solid var(--borderbold-color);
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+@media (max-width:412px) {
+.loginPop-box{
+    max-width: 370px;
+    width: 100%;
+}
+.loginPop-buttons button{
+    width: 160px;
+}
+}

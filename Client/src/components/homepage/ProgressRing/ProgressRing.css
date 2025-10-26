@@ -1,0 +1,25 @@
+.ProgressRing-container{
+  /* border: 2px solid;  */
+  font-family: 'Montserrat', sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center ;
+  color:var(--text-color);
+}   
+.ProgressRing-container p{
+   font-size: 18px;
+   font-weight: 100;
+   margin-top: 5px;
+}
+
+.range-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  max-width: 300px;
+  padding: 25px;
+  margin: 30px auto;
+}
