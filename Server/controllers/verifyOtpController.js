@@ -4,6 +4,13 @@ const User = require('../model/User.js');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 
+//CONFIG
+const ACCESS_TOKEN_TTL = '10min';
+const REFRESH_TOKEN_TTL = '7d';
+const isProduction = process.env.NODE_ENV === 'production';
+const MAX_COOKIE_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days
+const REFRESH_TOKEN_COOKIE_NAME = 'secure_t';
+
 // constant-time compare function
 function safeCompare(a, b) {
   if (a.length !== b.length) return false;
@@ -20,16 +27,14 @@ function signAccessToken(user) {
       }
     },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: process.env.ACCESS_TOKEN_TTL.toString() }
+    { expiresIn: ACCESS_TOKEN_TTL}
   );
 }
 
 function signRefreshToken(userId, tid) {
   // Store tid in token so we can find it later without storing whole JWT
-  return jwt.sign({ id: userId.toString(), tid }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_TTL.toString() });
+  return jwt.sign({ id: userId.toString(), tid }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: REFRESH_TOKEN_TTL });
 }
-
-const isProduction = process.env.NODE_ENV === 'production';
 
 const verifyOtp = async (req, res) => {
   try {
@@ -88,12 +93,12 @@ const verifyOtp = async (req, res) => {
     await user.save();
 
     // Creates Secure Cookie with refresh token
-     res.cookie(process.env.REFRESH_TOKEN_COOKIE_NAME, newRefreshToken, {
+    res.cookie(REFRESH_TOKEN_COOKIE_NAME, newRefreshToken, {
       httpOnly: true,
-      sameSite: 'lax',
-      // secure: true, // only send over HTTPS in production
-      // sameSite: isProduction ? 'Strict' : 'Lax', // change to 'None' if cross-site and ensure secure:true
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+      domain: process.env.COOKIE_DOMAIN_NAME,
+      secure: isProduction, // only send over HTTPS in production
+      sameSite: isProduction ? 'None' : 'Lax', // change to 'None' if cross-site and ensure secure:true
+      maxAge: MAX_COOKIE_AGE
     });
 
     // Send authorization roles and access token to user

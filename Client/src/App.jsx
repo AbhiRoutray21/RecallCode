@@ -27,8 +27,8 @@ export default function App() {
 
   const defaultTheme = localStorage.getItem("theme") || "Dark";
   document.documentElement.setAttribute("data-theme",defaultTheme);
+  
   const user = Number(import.meta.env.VITE_USER_ID);
-  const admin = Number(import.meta.env.VITE_ADMIN_ID);
 
   return (
     <Routes>
@@ -39,7 +39,7 @@ export default function App() {
           <Route path="/" element={<Homepage />} />
 
           {/* private routes */}
-          <Route element={<RequireAuth allowedRoles={[admin]} />}>
+          <Route element={<RequireAuth allowedRoles={[user]} />}>
             <Route path="/practice" element={
               <Suspense fallback={<PracticeSkeleton/>}><Practice /></Suspense>} 
             />

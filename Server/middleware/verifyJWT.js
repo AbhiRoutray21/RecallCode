@@ -2,11 +2,12 @@ const jwt = require('jsonwebtoken');
 const User = require('../model/User');
 require('dotenv').config();
 
+const REFRESH_TOKEN_COOKIE_NAME = 'secure_t';
+
 const verifyJWT = async (req, res, next) => {
     const cookies = req.cookies;
-    const refreshTokenName = process.env.REFRESH_TOKEN_COOKIE_NAME
-    if (!cookies && !cookies[refreshTokenName]) return res.sendStatus(401);
-    const refreshToken = cookies[refreshTokenName];
+    if (!cookies && !cookies[REFRESH_TOKEN_COOKIE_NAME]) return res.sendStatus(401);
+    const refreshToken = cookies[REFRESH_TOKEN_COOKIE_NAME];
 
     // Verify refresh token
     jwt.verify(

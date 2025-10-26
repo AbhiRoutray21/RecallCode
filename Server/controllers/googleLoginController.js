@@ -7,6 +7,13 @@ const { v4: uuidv4 } = require('uuid');
 const User = require('../model/User');
 const { capitalizeFirstLetter } = require('../utils/capitalizeFirstLetter');
 
+//CONFIG
+const ACCESS_TOKEN_TTL = '10min';
+const REFRESH_TOKEN_TTL = '7d';
+const isProduction = process.env.NODE_ENV === 'production';
+const MAX_COOKIE_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days
+const REFRESH_TOKEN_COOKIE_NAME = 'secure_t';
+
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
@@ -23,13 +30,13 @@ function signAccessToken(user) {
       }
     },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: process.env.ACCESS_TOKEN_TTL.toString() }
+    { expiresIn: ACCESS_TOKEN_TTL }
   );
 }
 
 function signRefreshToken(userId, tid) {
   // Store tid in token so we can find it later without storing whole JWT
-  return jwt.sign({ id: userId.toString(), tid }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_TTL.toString() });
+  return jwt.sign({ id: userId.toString(), tid }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: REFRESH_TOKEN_TTL });
 }
 
 
@@ -78,22 +85,22 @@ exports.googleAuth = async (req, res) => {
 
         user.refreshTokenIds = user.refreshTokenIds || [];
 
-        res.clearCookie(process.env.REFRESH_TOKEN_COOKIE_NAME, {
-            httpOnly: true,
-            // secure: isProduction,
-            // sameSite: isProduction ? 'Strict' : 'Lax' 
-            sameSite: 'Lax'
+        res.clearCookie(REFRESH_TOKEN_COOKIE_NAME, {
+          httpOnly: true,
+          domain: process.env.COOKIE_DOMAIN_NAME,
+          secure: isProduction, // only send over HTTPS in production
+          sameSite: isProduction ? 'None' : 'Lax', // change to 'None' if cross-site and ensure secure:true
         });
 
         user.refreshTokenIds = [...user.refreshTokenIds, newTid];
         await user.save();
 
-        res.cookie(process.env.REFRESH_TOKEN_COOKIE_NAME, newRefreshToken, {
-            httpOnly: true,
-            sameSite: 'lax',
-            // secure: isProduction, // only send over HTTPS in production
-            // sameSite: isProduction ? 'Strict' : 'Lax', // change to 'None' if cross-site and ensure secure:true
-            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        res.cookie(REFRESH_TOKEN_COOKIE_NAME, newRefreshToken, {
+          httpOnly: true,
+          domain: process.env.COOKIE_DOMAIN_NAME,
+          secure: isProduction, // only send over HTTPS in production
+          sameSite: isProduction ? 'None' : 'Lax', // change to 'None' if cross-site and ensure secure:true
+          maxAge: MAX_COOKIE_AGE
         });
 
         res.status(200).json({

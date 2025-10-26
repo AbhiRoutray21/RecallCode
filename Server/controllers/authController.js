@@ -12,6 +12,11 @@ const { v4: uuidv4 } = require('uuid');
 const MAX_FAILED_ATTEMPTS = 5;
 const LOCK_TIME_MINUTES = 15;
 const OTP_TTL_MS = 5 * 60 * 1000; // 5 minutes
+const isProduction = process.env.NODE_ENV === 'production';
+const ACCESS_TOKEN_TTL = '10min';
+const REFRESH_TOKEN_TTL = '7d';
+const MAX_COOKIE_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days
+const REFRESH_TOKEN_COOKIE_NAME = 'secure_t';
 
 // helper to issue tokens
 function signAccessToken(user) {
@@ -23,16 +28,14 @@ function signAccessToken(user) {
       }
     },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: process.env.ACCESS_TOKEN_TTL.toString() }
+    { expiresIn: ACCESS_TOKEN_TTL }
   );
 }
 
 function signRefreshToken(userId, tid) {
   // Store tid in token so we can find it later without storing whole JWT
-  return jwt.sign({ id: userId.toString(), tid }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_TTL.toString() });
+  return jwt.sign({ id: userId.toString(), tid }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: REFRESH_TOKEN_TTL });
 }
-
-const isProduction = process.env.NODE_ENV === 'production';
 
 const handleLogin = async (req, res) => {
   try {
@@ -136,7 +139,7 @@ const handleLogin = async (req, res) => {
       foundUser.refreshTokenIds = foundUser.refreshTokenIds.slice(1,MAX_STORED_REFRESH_TOKENS);
     }
 
-    const incomingCookie = cookies[process.env.REFRESH_TOKEN_COOKIE_NAME];
+    const incomingCookie = cookies[REFRESH_TOKEN_COOKIE_NAME];
 
     // Build new token id and refresh token
     const newTid = uuidv4();
@@ -172,11 +175,11 @@ const handleLogin = async (req, res) => {
       }
 
       // Clear the cookie from browser regardless (to prevent the old value persisting)
-      res.clearCookie(process.env.REFRESH_TOKEN_COOKIE_NAME, {
+      res.clearCookie(REFRESH_TOKEN_COOKIE_NAME, {
         httpOnly: true,
-        // secure: isProduction,
-        // sameSite: isProduction ? 'Strict' : 'Lax' 
-        sameSite: 'Lax' 
+        domain: process.env.COOKIE_DOMAIN_NAME,
+        secure: isProduction, // only send over HTTPS in production
+        sameSite: isProduction ? 'None' : 'Lax', // change to 'None' if cross-site and ensure secure:true
       });
     }
 
@@ -186,12 +189,12 @@ const handleLogin = async (req, res) => {
     await foundUser.save();
 
     // Set the refresh token cookie. Note: sameSite/scope depends on your frontend domain setup.
-    res.cookie(process.env.REFRESH_TOKEN_COOKIE_NAME, newRefreshToken, {
+    res.cookie(REFRESH_TOKEN_COOKIE_NAME, newRefreshToken, {
       httpOnly: true,
-      sameSite: 'lax',
-      // secure: isProduction, // only send over HTTPS in production
-      // sameSite: isProduction ? 'Strict' : 'Lax', // change to 'None' if cross-site and ensure secure:true
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+      domain: process.env.COOKIE_DOMAIN_NAME,
+      secure: isProduction, // only send over HTTPS in production
+      sameSite: isProduction ? 'None' : 'Lax', // change to 'None' if cross-site and ensure secure:true
+      maxAge: MAX_COOKIE_AGE  
     });
 
     // Return access token and user data. Keep the refresh token only in cookie.
