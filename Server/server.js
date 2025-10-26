@@ -9,7 +9,7 @@ const cookieParser = require('cookie-parser');
 const credentials = require('./middleware/credentials');
 const mongoose = require('mongoose');
 const connectDB = require('./config/dbConn');
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 7000;
 
 // Connect to MongoDB
 connectDB();
@@ -32,7 +32,9 @@ app.use(express.json());
 app.use(cookieParser());
 
 //serve static files
-app.use('/', express.static(path.join(__dirname, 'text.html')));
+app.get('/', (req, res) => {
+  res.json({ message: 'Hello form RecallCode backend..' });
+});
 
 // routes
 app.use('/register', require('./routes/register'));
@@ -64,5 +66,5 @@ app.all('/*splat', (req, res) => {
 
 mongoose.connection.once('open', () => {
     console.log('Connected to MongoDB');
-    app.listen(PORT,"0.0.0.0", () => console.log(`Server running on http://0.0.0.0:7000`));
+    app.listen(PORT,"0.0.0.0", () => console.log(`Server running on port ${PORT}`));
 });
