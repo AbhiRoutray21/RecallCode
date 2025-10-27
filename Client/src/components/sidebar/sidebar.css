@@ -40,10 +40,11 @@
     padding-right: 6px;
     flex-shrink: 0;
 }
-.sidebar-logo{
-    display: flex;
-    align-items: center;
+.sidebar-navlink{
+    text-decoration: none;
+    color: var(--text-color);
 }
+
 /*-----------------------------*/
 .sidebar-closeicon-div{
     position: relative;

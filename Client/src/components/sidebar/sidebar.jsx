@@ -7,7 +7,7 @@ import { IoClose } from "react-icons/io5";
 import { MdErrorOutline,MdOutlineLightMode,MdOutlineDarkMode } from "react-icons/md";
 import './sidebar.css';
 import { useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import useOutsideClick from "../../hooks/useOutsideClick";
 import { motion, AnimatePresence } from 'framer-motion'
 import useAuth from "../../hooks/useAuth";
@@ -94,7 +94,11 @@ export default function Sidebar() {
                 <div className='sidebar-content'>
                     <div className='header-options-container'>
                         <div className='sidebar-header' style={sideBarOpen ? {} : { backgroundColor: 'var(--bg-p-color)' }}>
-                            {sideBarOpen && <div className="sidebar-logo" onClick={() => {navigate('/'),closeSidebar()}} style={{ cursor: 'pointer' }}>  RecallCode</div>}
+                            {sideBarOpen && 
+                                <div className="sidebar-logo" onClick={() => closeSidebar()} style={{ cursor: 'pointer' }}>
+                                    <NavLink className={'sidebar-navlink'} to={'/'}>RecallCode</NavLink>
+                                </div>
+                            }
                             <motion.div className="sidebar-closeicon-div">
                                 {sideBarOpen
                                     ? <>
