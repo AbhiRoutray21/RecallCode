@@ -29,6 +29,7 @@
   --bg-p-color: var(--light-black-300);
   --bg-ssb-color: var(--light-black-400);
   --bg-s-color: var(--light-black-200);
+  --bg-footer-color: #cbcbcb;
   --bg-box-color: var( --light-black-600);
   --box-border: rgba(77, 77, 77, 0.475);
   --text-color: black;
@@ -89,6 +90,7 @@
   --bg-p-color: var(--black-300);
   --bg-ssb-color: var(--black-400);
   --bg-s-color: var(--black-200);
+  --bg-footer-color: #131313;
   --bg-box-color: var(--black-600);
   --box-border: rgba(77, 77, 77, 0.475);
   --text-color: white;

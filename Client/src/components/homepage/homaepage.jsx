@@ -2,7 +2,7 @@ import './homepage.css';
 import { motion } from 'framer-motion';
 import ProgressRingAmination from './ProgressRing/ProgressRing';
 import LanguageGrid from './TrialLanguages/trialLanguages';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 
 const Homepage = () => {
@@ -46,7 +46,6 @@ const Homepage = () => {
    return (
          <div className='homepage-container'>
             <div className="trial-container">
-               <div className='trial-content-container'>
                   <motion.div variants={parentVariants} initial="hidden" animate="visible" className="hero"  >
                      <motion.h1 variants={childVariants} className="hero-title fade-item fade-delay-1">
                         Never Forget What You’ve Learned — RecallCode
@@ -102,7 +101,31 @@ const Homepage = () => {
 
                   <p className='homepage-endMessage' style={{color:'var(--text-color)'}}>Keep learning, Keep Growing!</p>
 
-               </div>
+                  <div className='homepage-footer'>
+                    <div className='footer-items'>
+                        <div className='footer-item'>
+                           <span className='footer-logo'>RecallCode</span>
+                           <p className='footer-message'>
+                              RecallCode helps you practice coding the smart way.
+                              Refresh your syntax, recall key concepts, and grow
+                              your problem-solving confidence — one quiz at a time.
+                           </p>
+                        </div>
+                        <div className='footer-item footer-links'>
+                           <NavLink className={"footer-navlink"} to={auth?.accessToken ? "/practice" : "#login"}>Practice</NavLink>
+                           <NavLink className={"footer-navlink"} to={auth?.accessToken ? "/selective" : "#login"}>Selective Questions</NavLink>
+                           <NavLink className={"footer-navlink"} to={auth?.accessToken ? "/challenge" : "#login"}>Challange</NavLink>
+                        </div>
+                        <div className='footer-item footer-links'>
+                           <NavLink className={"footer-navlink"} to={''}>About</NavLink>
+                           <NavLink className={"footer-navlink"} to={''}>Privacy Policy</NavLink>
+                           <NavLink className={"footer-navlink"} to={''}>Terms of Use</NavLink>
+                        </div>
+                    </div>
+                    <div className='copyright'>
+                        © 2025 RecallCode. All rights reserved.
+                    </div>
+                  </div>
             </div>
          </div> 
    );
