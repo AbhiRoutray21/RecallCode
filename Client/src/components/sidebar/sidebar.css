@@ -35,14 +35,25 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 12px;
-    /* padding-left: 8px; */
+    padding: 0px 12px;
     padding-right: 6px;
     flex-shrink: 0;
 }
 .sidebar-navlink{
     text-decoration: none;
     color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: -12px;
+}
+.logoIcon{
+    padding: 3px;
+    border-radius: 9px;
+    color: var(--text-color);
+}
+.logoIcon:hover{
+    background-color: var(--onhover2-color);
 }
 
 /*-----------------------------*/

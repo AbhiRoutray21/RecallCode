@@ -4,6 +4,7 @@ import ProgressRingAmination from './ProgressRing/ProgressRing';
 import LanguageGrid from './TrialLanguages/trialLanguages';
 import { Link, NavLink } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
+import LogoIcon from '../customIcons/logoIcon';
 
 const Homepage = () => {
    const {auth} = useAuth();
@@ -104,7 +105,7 @@ const Homepage = () => {
                   <div className='homepage-footer'>
                     <div className='footer-items'>
                         <div className='footer-item'>
-                           <span className='footer-logo'>RecallCode</span>
+                           <span className='footer-logo'><LogoIcon className='footer-logoIcon'/>RecallCode</span>
                            <p className='footer-message'>
                               RecallCode helps you practice coding the smart way.
                               Refresh your syntax, recall key concepts, and grow

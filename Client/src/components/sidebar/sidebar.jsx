@@ -12,6 +12,7 @@ import useOutsideClick from "../../hooks/useOutsideClick";
 import { motion, AnimatePresence } from 'framer-motion'
 import useAuth from "../../hooks/useAuth";
 import useMainLayoutContext from "../../hooks/useMainLayoutContext";
+import LogoIcon from "../customIcons/logoIcon";
 
 export default function Sidebar() {
     const {auth} = useAuth();
@@ -96,7 +97,7 @@ export default function Sidebar() {
                         <div className='sidebar-header' style={sideBarOpen ? {} : { backgroundColor: 'var(--bg-p-color)' }}>
                             {sideBarOpen && 
                                 <div className="sidebar-logo" onClick={() => closeSidebar()} style={{ cursor: 'pointer' }}>
-                                    <NavLink className={'sidebar-navlink'} to={'/'}>RecallCode</NavLink>
+                                    <NavLink className={'sidebar-navlink'} to={'/'}><LogoIcon size={40}  className="logoIcon"/><span>RecallCode</span></NavLink>
                                 </div>
                             }
                             <motion.div className="sidebar-closeicon-div">
