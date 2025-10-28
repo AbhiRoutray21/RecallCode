@@ -115,7 +115,7 @@ const Homepage = () => {
                         <div className='footer-item footer-links'>
                            <NavLink className={"footer-navlink"} to={auth?.accessToken ? "/practice" : "#login"}>Practice</NavLink>
                            <NavLink className={"footer-navlink"} to={auth?.accessToken ? "/selective" : "#login"}>Selective Questions</NavLink>
-                           <NavLink className={"footer-navlink"} to={auth?.accessToken ? "/challenge" : "#login"}>Challange</NavLink>
+                           <NavLink className={"footer-navlink"} to={auth?.accessToken ? "/challenge" : "#login"}>Challenge</NavLink>
                         </div>
                         <div className='footer-item footer-links'>
                            <NavLink className={"footer-navlink"} to={''}>About</NavLink>
