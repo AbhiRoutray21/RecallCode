@@ -1,0 +1,146 @@
+.outer-container{
+    border: 1px solid rgba(255, 255, 255, 0.225);
+    max-width: 615px;
+    width: 100%;
+    height: 610px;
+    margin-top: 20px;
+    border-radius: 28px;
+    background-color: rgba(255, 255, 255, 0);
+    padding: 20px;
+    padding-right: 5px;
+}
+.markdown-container{
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    padding-right: 10px;
+}
+.markdown-container::-webkit-scrollbar{
+  width: 8px;
+}
+.markdown-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.115);
+  border-radius: 10px;
+}
+.markdown-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.422);
+}
+
+.markdown-container h1,
+.markdown-container h2,
+.markdown-container h3 {
+  color: #ffffff;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.markdown-container h1 {
+  font-size: 2rem;
+  border-bottom: 2px solid #444;
+  padding-bottom: 10px;
+}
+
+.markdown-container h2 {
+  font-size: 1.6rem;
+  margin-top: 30px;
+}
+
+.markdown-container h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 25px;
+  margin-bottom: 5px;
+}
+
+/* Paragraphs */
+.markdown-container p {
+  margin-bottom: 16px;
+  color: #e2e2e2;
+}
+
+/* Bold text */
+.markdown-container strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Italic text */
+.markdown-container em {
+  color: #d3d3d3;
+}
+
+/* Lists */
+.markdown-container ul {
+  margin-left: 25px;
+  margin-bottom: 16px;
+}
+
+.markdown-container li {
+  margin-bottom: 8px;
+}
+
+/* Links */
+.markdown-container a {
+  color: #00bcd4;
+  text-decoration: none;
+  border-bottom: 1px dashed #00bcd4;
+  transition: color 0.2s;
+}
+
+.markdown-container a:hover {
+  color: #fff;
+}
+
+/* Code blocks (inline) */
+.markdown-container code {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 3px 6px;
+  border-radius: 5px;
+  font-family: "Fira Code", monospace;
+  font-size: 0.95rem;
+}
+
+/* Blockquotes */
+.markdown-container blockquote {
+  border-left: 4px solid #00bcd4;
+  padding-left: 15px;
+  margin: 20px 0;
+  color: #cccccc;
+  font-style: italic;
+}
+
+/* skeleton */
+.shimmer {
+  background: linear-gradient(90deg, #33333334 25%, #d9d9d919 50%, #33333334 75%);
+  animation: shimmer 2s infinite linear;
+}
+@keyframes shimmer {
+  0% {
+    background-position: -100px 0;
+  }
+  100% {
+    background-position: 300px 0;
+  }
+}
+.heading-skeleton{
+    background-color: #2b2b2b60;
+    height: 30px;
+    width: 35%;
+    border-radius: 99px;
+}
+.para-skeleton{
+    width: 70%;
+    height: 20px;
+    border-radius: 99px;
+    background-color: #2b2b2b60;
+}
+
+/* Responsive */
+@media (max-width: 412px) {
+.outer-container{
+    height: 580px;
+}    
+.markdown-container h1 {
+    font-size: 1.6rem;
+}
+}
