@@ -137,13 +137,60 @@
   height: 100dvh;
   display: flex;
   /* border: 2px solid red; */
-  /* overflow: hidden; */
+  overflow: hidden;
 }
 .mainLayout-content-container{
   flex-grow: 1;
   /* border: 2px solid orange; */
   display:flex;
   flex-direction: column;
+}
+.privacy-notice-pop{
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  color: white;
+  position: absolute;
+  top: 89%;
+  right: 8px;
+  height: max-content;
+  width: 510px;
+  background-color: #4facfe ;
+  border-radius: 18px;
+  padding: 12px 12px;
+  box-shadow: 0 0 7px rgba(11, 11, 11, 0.768);  
+  animation: fadeIn 1.8s ease-in-out forwards;
+  z-index: 10;
+}
+@keyframes fadeIn {
+  from { opacity: 0;top: 150%; }
+  to   { opacity: 1;top: 89%; }
+}
+.notice-link{
+  color: #0300ad ;
+}
+.privacy-notice-pop div{
+  width: max-content;
+  margin-left: auto;
+  margin-right: 10px;
+  font-size: 14px;
+}
+.privacy-notice-pop div:hover{
+  scale: 1.05;
+  cursor: pointer;
+}
+
+@media (max-width: 412px) {
+.privacy-notice-pop{
+  position: absolute;
+  top: 87%;
+  right: 0;
+  width: 100%; 
+  animation: fadeIn 1.8s ease-in-out forwards;
+}
+@keyframes fadeIn {
+  from { opacity: 0;top: 150%; }
+  to   { opacity: 1;top: 87%; }
+}
 }
 /*--------------------------------------*/
 
