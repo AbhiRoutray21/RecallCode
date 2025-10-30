@@ -283,9 +283,8 @@
    font-family: inherit;
    font-weight: 100;
    font-size: 16px;
-   border-radius: 19px;
-   border: 1px solid var(--text-color);
-   /* border: none; */
+   border: none;
+   border-bottom: 1px solid var(--borderbold-color);
    outline: none;
    background-color: transparent;
    min-width: 85px;
@@ -294,27 +293,6 @@
    text-align: center;
    margin: 0 auto;
    color: var(--text-color);
-}
-.input-check-box{
-   /* border: 1px solid white; */
-   display: flex;
-   align-items: center;
-   gap: 3px;
-   /* padding-left: 30px; */
-}
-.changename-ckeckicon{
-    border: 1px solid rgb(0, 190, 0);
-    padding: 2px;
-    border-radius: 19px;
-    width: 26px;
-    height: 26px;
-}         
-.changename-ckeckicon:hover{
-    cursor: pointer;
-}
-.changename-ckeckicon:active{
-    cursor: pointer;
-    background-color: #47f9473f;
 }
 /*--------------------------------------------------*/
 .resetMessage{

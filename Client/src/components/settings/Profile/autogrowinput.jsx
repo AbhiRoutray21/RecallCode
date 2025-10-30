@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import '../settings.css';
-import { IoCheckmark } from "react-icons/io5";
 import useOutsideClick from "../../../hooks/useOutsideClick";
 import { toast } from 'react-toastify';
 import { jwtDecode } from "jwt-decode";
@@ -14,7 +13,6 @@ export default function AutoGrowInput({setChange}) {
   const spanRef = useRef(null);
   const inputRef = useRef(null);
   const changeNameRef = useRef();
-  useOutsideClick(changeNameRef, () => setChange(false));
 
   const decode = auth?.accessToken
     ? jwtDecode(auth.accessToken)
@@ -55,6 +53,7 @@ export default function AutoGrowInput({setChange}) {
   const submitchange = async() => {
     if(name.length < 3){
       toast.error('Name must contain atleast 3 letters.');
+      setChange(false);
       return;
     }
     try {
@@ -80,6 +79,16 @@ export default function AutoGrowInput({setChange}) {
     }
   }
 
+  useOutsideClick(changeNameRef, () => {
+    submitchange();
+  });
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      submitchange();
+    }
+  };
+
   return (
     <div ref={changeNameRef} className="changeName-div">
       {/* Hidden span to measure text width */}
@@ -87,16 +96,14 @@ export default function AutoGrowInput({setChange}) {
         {name || " "}
       </span>
 
-      <div className="input-check-box">
         <input
           ref={inputRef}
           type="text"
           value={name}
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
           spellCheck="false"
         />
-        <IoCheckmark className="changename-ckeckicon" onClick={submitchange} />
-      </div>
       
     </div>
   );
