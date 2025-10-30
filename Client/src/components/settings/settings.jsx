@@ -7,9 +7,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import useOutsideClick from "../../hooks/useOutsideClick";
 import useAuth from '../../hooks/useAuth';
 import { motion } from 'framer-motion'
-import Theme from './Theme/theme';
-import Profile from './Profile/profile';
-import Reset from './Reset/reset';
+import { lazy, Suspense } from "react";
+const Profile = lazy(() => import('./Profile/profile'));
+const Theme = lazy(() => import('./Theme/theme'));
+const Reset = lazy(() => import('./Reset/reset'));
 
 export default function SettingsPop() {
     const navigate = useNavigate();
@@ -70,9 +71,9 @@ export default function SettingsPop() {
                     </div>
 
                     <div className='settings-contentbox'>
-                        {section === 'profile' && <Profile setSettingsPop={setSettingsPop}/>}
-                        {section === 'theme' && <Theme setSettingsPop={setSettingsPop}/>}
-                        {section === 'reset' && <Reset setSettingsPop={setSettingsPop}/>}
+                        {section === 'profile' && <Suspense fallback={<Loader/>}><Profile setSettingsPop={setSettingsPop}/></Suspense>}
+                        {section === 'theme' && <Suspense fallback={<Loader/>}><Theme setSettingsPop={setSettingsPop}/></Suspense> }
+                        {section === 'reset' && <Suspense fallback={<Loader/>}><Reset setSettingsPop={setSettingsPop}/></Suspense> }
                     </div>
                     </motion.div>
                 </motion.div>
@@ -81,4 +82,12 @@ export default function SettingsPop() {
     );
 }
 
-
+const Loader = () =>{
+    return(
+        <div className='settings-loader-box'>
+        <div className='settings-page-loader'>
+            <div className='shimmer'>L</div>
+        </div>
+        </div>
+    )
+}
