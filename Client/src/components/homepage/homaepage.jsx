@@ -118,9 +118,30 @@ const Homepage = () => {
                            <NavLink className={"footer-navlink"} to={auth?.accessToken ? "/challenge" : "#login"}>Challenge</NavLink>
                         </div>
                         <div className='footer-item footer-links'>
-                           <NavLink className={"footer-navlink"} to={''}>About</NavLink>
-                           <NavLink className={"footer-navlink"} to={''}>Privacy Policy</NavLink>
-                           <NavLink className={"footer-navlink"} to={''}>Terms of Use</NavLink>
+                           <NavLink 
+                           className={"footer-navlink"} 
+                           to={'http://localhost:5174'} 
+                           target="_blank" 
+                           rel="noopener noreferrer"
+                           >
+                              About
+                           </NavLink>
+                           <NavLink 
+                           className={"footer-navlink"} 
+                           to={'http://localhost:5174/privacy-policy'} 
+                           target="_blank" 
+                           rel="noopener noreferrer"
+                           >
+                              Privacy Policy
+                           </NavLink>
+                           <NavLink 
+                           className={"footer-navlink"} 
+                           to={'http://localhost:5174/terms'} 
+                           target="_blank" 
+                           rel="noopener noreferrer"
+                           >
+                              Terms and Conditions
+                           </NavLink>
                         </div>
                     </div>
                     <div className='copyright'>

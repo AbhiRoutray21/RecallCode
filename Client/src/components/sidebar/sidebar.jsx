@@ -189,7 +189,7 @@ export default function Sidebar() {
                                     <BiCog className="p-i-u-option-icon" />
                                     <span>Settings</span>
                                 </div>
-                                <div className="p-i-u-option-div" onClick={() => {navigate('/about');closeSidebar()}}>
+                                <div className="p-i-u-option-div" onClick={() => {window.open("http://localhost:5174", "_blank", "noopener");closeSidebar()}}>
                                     <MdErrorOutline className="p-i-u-option-icon about" />
                                     <span>About</span>
                                 </div>
