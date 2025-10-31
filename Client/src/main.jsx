@@ -20,7 +20,6 @@ createRoot(document.getElementById('root')).render(
           position="top-center"
           autoClose={4500}
           limit={3}
-          hideProgressBar
           newestOnTop={false}
           closeOnClick={false}
           rtl={false}

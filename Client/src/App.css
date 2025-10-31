@@ -192,8 +192,8 @@
   to   { opacity: 1;top: 87%; }
 }
 }
-/*--------------------------------------*/
 
+/*----------------------------------------------*/
 .Toastify__toast.Toastify__toast-theme--colored {
   border-radius: 18px !important;
   width: 420px !important;
@@ -201,8 +201,15 @@
   font-family: 'Montserrat', sans-serif;
 }  
 
-.Toastify__close-button > svg {
+.Toastify__close-button > svg { 
   margin: 4px 5px 0 0;
+}
+
+.Toastify__progress-bar--wrp {
+  width: 90% !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  border-radius: 18px !important;
 }
 
 @media (max-width: 412px) {
