@@ -76,10 +76,6 @@ const forgotPassTokenVerify = async (req, res) => {
     const isMatch = await bcrypt.compare(token, userResetPassData.tokenHash);
     if (!isMatch) return res.status(400).json({ message: 'Invalid link' });
 
-    const newExpiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
-
-    await Password_reset_token.updateOne({ resetId }, { $set: { expiresAt: newExpiresAt } });
-
     res.status(200).json({ email: userResetPassData.email, message: 'Link verified' });
 
   } catch (err) {
