@@ -130,6 +130,8 @@ const changeForgotPass = async (req, res) => {
     user.password = newHashedPassword;
     user.passwordChangedAt = new Date();
     user.refreshTokenIds = [];
+    user.failedLoginAttempts = 0;
+    user.lockUntil = null;
     // save triggers pre-save hooks
     await user.save();
 

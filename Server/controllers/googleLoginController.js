@@ -97,8 +97,8 @@ exports.googleAuth = async (req, res) => {
         });
 
         user.refreshTokenIds = [...user.refreshTokenIds, newTid];
-        foundUser.failedLoginAttempts = 0;
-        foundUser.lockUntil = null;
+        user.failedLoginAttempts = 0;
+        user.lockUntil = null;
         await user.save();
 
         res.cookie(REFRESH_TOKEN_COOKIE_NAME, newRefreshToken, {
