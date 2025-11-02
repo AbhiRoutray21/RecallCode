@@ -65,7 +65,7 @@ exports.googleAuth = async (req, res) => {
                 googleLogin: true,
                 isVerified: true,
             });
-        } else if(user && !user.isVerified){
+        } else if(user && !user.lockUntil && !user.isVerified){
             await User.findOneAndDelete({email});
             user = await User.create({
                 name,
@@ -74,6 +74,10 @@ exports.googleAuth = async (req, res) => {
                 googleLogin: true,
                 isVerified: true,
             });
+        }
+
+        if (user.lockUntil && user.lockUntil > new Date()) {
+          return res.status(423).json({ message: `Account locked. Try again after 15 minutes.` });
         }
 
         const { _id } = user;
@@ -93,6 +97,8 @@ exports.googleAuth = async (req, res) => {
         });
 
         user.refreshTokenIds = [...user.refreshTokenIds, newTid];
+        foundUser.failedLoginAttempts = 0;
+        foundUser.lockUntil = null;
         await user.save();
 
         res.cookie(REFRESH_TOKEN_COOKIE_NAME, newRefreshToken, {

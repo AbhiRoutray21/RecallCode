@@ -120,12 +120,14 @@ const handleLogin = async (req, res) => {
     if (!match) {
       // Increment failed attempts and possibly lock account
       foundUser.failedLoginAttempts = (foundUser.failedLoginAttempts || 0) + 1;
+      const remain = Math.max(0,MAX_FAILED_ATTEMPTS - (foundUser.failedLoginAttempts || 0));
+
       if (foundUser.failedLoginAttempts >= MAX_FAILED_ATTEMPTS) {
         foundUser.lockUntil = new Date(Date.now() + LOCK_TIME_MINUTES * 60 * 1000);
         foundUser.failedLoginAttempts = 0; // reset after locking
       }
       await foundUser.save();
-      return res.status(401).json({ message: 'Invalid credentials.' });
+      return res.status(401).json({ message:`Invalid credentials. (${remain} attempt remaining)` });
     }
 
     // Successful login -> reset failed attempts
