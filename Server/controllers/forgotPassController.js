@@ -24,7 +24,7 @@ const forgotPassLink = async (req, res) => {
 
     if (resetPassData) {
       if (resetPassData.resetRequest >= 3) { // max 3 times user can request for resetPass email.
-        return res.status(429).json({ message: 'you can request for password reset email only 3 times a day.' });
+        return res.status(429).json({ message: 'You can request a password reset only 3 times per day.' });
       }
       await Password_reset_token.deleteMany({ email });
     }
@@ -106,7 +106,7 @@ const changeForgotPass = async (req, res) => {
           $set: { expiresAt: new Date() }
         }
       );
-      return res.status(429).json({ message: 'you can set your password only 2 times a day.' });
+      return res.status(429).json({ message: 'you can set your password only 2 times per day.' });
     }
 
     if (userResetPassData.expiresAt < Date.now()) {

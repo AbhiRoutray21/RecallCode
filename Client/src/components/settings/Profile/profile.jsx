@@ -8,8 +8,11 @@ import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
 import axios from "axios";
 import { toast } from 'react-toastify';
 import Spinner from '../../../loader/spinner';
-import AutoGrowInput from './autogrowinput';
 import { jwtDecode } from "jwt-decode";
+import { lazy,Suspense } from 'react';
+const PassChangeBox = lazy(() => import('./passChangeBox'));
+const AutoGrowInput = lazy(() => import('./autogrowinput'));
+
 
 export default function Profile({setSettingsPop}){
     const navigate = useNavigate();
@@ -18,6 +21,7 @@ export default function Profile({setSettingsPop}){
     const [userData, setUserData] = useState({});
     const [loading, setLoading] = useState(true);
     const [change,setChange] = useState(false);
+    const [openPassBox,setOpenPassBox] = useState(false);
 
     const decode = auth?.accessToken 
         ? jwtDecode(auth.accessToken)
@@ -61,25 +65,6 @@ export default function Profile({setSettingsPop}){
         }
     }, []);
 
-    const passChange = async () =>{
-        try {
-            const response = await axiosPrivate.post("/forgotpass", {email:userData.email});
-            if (response.status === 200) {
-                toast.success(`Reset email sent. (${response.data.remain} attempt remaining)`);
-            }
-        } catch (error) {
-            if (!error?.response) {
-                toast.error('no server response')
-            } else if (error.response?.status === 429) {
-                toast.error(error.response.data.message);
-            } else if (error.response?.status === 500) {
-                toast.error(error.response.data.message);
-            } else {
-                toast.error('Somthing went wrong');
-            }
-        }
-    }
-
     const userDelete = async () =>{
         try {
             const response = await axiosPrivate.delete(`/users/${decode.UserInfo.id}`);
@@ -120,7 +105,7 @@ export default function Profile({setSettingsPop}){
                     </div>
                     <div className='profile-userName'>
                         {change
-                        ? <AutoGrowInput setChange={setChange}/>
+                        ? <Suspense fallback={''}><AutoGrowInput setChange={setChange}/></Suspense> 
                         :<>
                             <span>
                                 {auth?.accessToken ? auth.name : 'User'}
@@ -136,18 +121,19 @@ export default function Profile({setSettingsPop}){
                         <span className='profile-userData'>{userData.email}</span>
                     </div>
                     <div className='profile-userDetail'>
-                        <div>
+                        <div className='profile-password-div'>
                             <span className='profile-infoField'>Password: </span>
                             <span className='profile-userData'>&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;</span>
                             {userData?.passwordChangedAt && 
                                 <p className='passLastChange'>(Last change: {userData.passwordChangedAt})</p>
                             }
+                            {openPassBox && <Suspense fallback={''}><PassChangeBox userData={userData} setOpenPassBox={setOpenPassBox}/></Suspense> }
                         </div>
-                        <button className='profile-passChange-btn' onClick={passChange}>Change</button>
+                        {!openPassBox && <button className='profile-passChange-btn' onClick={() => setOpenPassBox(true)}>Change</button>}
                     </div>
                     <div className='profile-userDetail delete'>
                         <span>Delete Account</span>
-                        <button className='profile-accDelete-btn' onClick={userDelete}>Delete</button>
+                        <button className='profile-accDelete-btn' onClick={''}>Delete</button>
                     </div>
                 </div>
                 </>

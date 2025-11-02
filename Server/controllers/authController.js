@@ -139,8 +139,6 @@ const handleLogin = async (req, res) => {
       foundUser.refreshTokenIds = foundUser.refreshTokenIds.slice(1,MAX_STORED_REFRESH_TOKENS);
     }
 
-    const incomingCookie = cookies[REFRESH_TOKEN_COOKIE_NAME];
-
     // Build new token id and refresh token
     const newTid = uuidv4();
     const newRefreshToken = signRefreshToken(foundUser._id, newTid);
@@ -150,6 +148,8 @@ const handleLogin = async (req, res) => {
     foundUser.refreshTokenIds = foundUser.refreshTokenIds || []; // array of tid strings
 
     // If there is an incoming cookie, try to detect reuse
+    const incomingCookie = cookies[REFRESH_TOKEN_COOKIE_NAME];
+
     if (incomingCookie) {
       try {
         // decode the cookie to read tid (we don't need to verify signature to read tid, but we will attempt verify)
@@ -163,8 +163,19 @@ const handleLogin = async (req, res) => {
           // Reuse detected: the cookie holds a tid that isn't present in DB.
           // Clear all stored refresh tokens for this user (force logout everywhere)
           foundUser.refreshTokenIds = [];
+
+          // Clear the cookie from browser regardless (to prevent the old value persisting)
+          res.clearCookie(REFRESH_TOKEN_COOKIE_NAME, {
+            httpOnly: true,
+            domain: process.env.COOKIE_DOMAIN_NAME,
+            secure: isProduction, // only send over HTTPS in production
+            sameSite: isProduction ? 'None' : 'Lax', // change to 'None' if cross-site and ensure secure:true
+          });
+          
           // also optionally revoke sessions, update security logs, send alert email to user
           console.warn('Refresh token reuse detected for user:', foundUser.email);
+
+          return res.status(401).json({ message: 'Invalid credentials.' });
         } else {
           // Remove the incomingTid from wherever it was stored (we're rotating)
           foundUser.refreshTokenIds = foundUser.refreshTokenIds.filter(tid => tid !== incomingTid);
@@ -173,14 +184,6 @@ const handleLogin = async (req, res) => {
         // decode could fail or token malformed - be conservative and clear all previous tokens
         foundUser.refreshTokenIds = [];
       }
-
-      // Clear the cookie from browser regardless (to prevent the old value persisting)
-      res.clearCookie(REFRESH_TOKEN_COOKIE_NAME, {
-        httpOnly: true,
-        domain: process.env.COOKIE_DOMAIN_NAME,
-        secure: isProduction, // only send over HTTPS in production
-        sameSite: isProduction ? 'None' : 'Lax', // change to 'None' if cross-site and ensure secure:true
-      });
     }
 
     // Attach new tid and save user

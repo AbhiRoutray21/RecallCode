@@ -46,8 +46,9 @@ app.use('/refresh', require('./routes/refresh'));
 app.use('/trialQues', require('./routes/trialQuestions'));
 
 app.use(verifyJWT);
-app.use('/logout', require('./routes/logout'));
+app.use('/logout', require('./routes/api/logout'));
 app.use('/users', require('./routes/api/users'));
+app.use('/passChange', require('./routes/api/passChange'));
 app.use('/practice', require('./routes/api/practice'));
 app.use('/resetProgress', require('./routes/resetProgress'));
 app.use('/selective', require('./routes/api/selective'));
