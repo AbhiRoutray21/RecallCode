@@ -50,7 +50,7 @@ export default function MainLayout() {
           <div className="privacy-notice-pop">
             <p>
               By continuing to use this website, you agree to our use of cookies.
-              You can read our<NavLink to={'http://localhost:5174/privacy-policy'} target="_blank" rel="noopener noreferrer" className={'notice-link'}> Privacy Policy</NavLink> and <NavLink to={'http://localhost:5174/terms'} target="_blank" rel="noopener noreferrer" className={'notice-link'}> Terms & Conditions</NavLink> for more information.</p>
+              You can read our<NavLink to={`${import.meta.env.VITE_DOCS_URL}/privacy-policy`} target="_blank" rel="noopener noreferrer" className={'notice-link'}> Privacy Policy</NavLink> and <NavLink to={`${import.meta.env.VITE_DOCS_URL}/terms`} target="_blank" rel="noopener noreferrer" className={'notice-link'}> Terms & Conditions</NavLink> for more information.</p>
             <div onClick={comfirm}>Got it</div>
           </div>
         }

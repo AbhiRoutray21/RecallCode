@@ -120,7 +120,7 @@ const Homepage = () => {
                         <div className='footer-item footer-links'>
                            <NavLink 
                            className={"footer-navlink"} 
-                           to={'http://localhost:5174'} 
+                           to={`${import.meta.env.VITE_DOCS_URL}`} 
                            target="_blank" 
                            rel="noopener noreferrer"
                            >
@@ -128,7 +128,7 @@ const Homepage = () => {
                            </NavLink>
                            <NavLink 
                            className={"footer-navlink"} 
-                           to={'http://localhost:5174/privacy-policy'} 
+                           to={`${import.meta.env.VITE_DOCS_URL}/privacy-policy`} 
                            target="_blank" 
                            rel="noopener noreferrer"
                            >
@@ -136,7 +136,7 @@ const Homepage = () => {
                            </NavLink>
                            <NavLink 
                            className={"footer-navlink"} 
-                           to={'http://localhost:5174/terms'} 
+                           to={`${import.meta.env.VITE_DOCS_URL}/terms`} 
                            target="_blank" 
                            rel="noopener noreferrer"
                            >
