@@ -72,7 +72,7 @@ const Forgotpassword = () => {
 
           {/* Buttons */}
           <div className="VF-form-buttons">
-            <button type="submit" className="VF-btn">Send OTP</button>
+            <button type="submit" className="VF-btn">Send</button>
           </div>
 
         </form>

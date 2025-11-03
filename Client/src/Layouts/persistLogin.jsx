@@ -17,7 +17,6 @@ const PersistLogin = () => {
                 await refresh();
             }
             catch (err) {
-                console.error(err);
                 navigate('/');
             }
             finally {
@@ -25,7 +24,7 @@ const PersistLogin = () => {
             }
         }
 
-        // Avoids unwanted call to verifyRefreshToken
+        // Avoids unwanted api call to verifyRefreshToken
         !auth?.accessToken ? verifyRefreshToken() : setIsLoading(false);
 
         return () => isMounted = false;
