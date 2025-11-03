@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const PracticeSessionSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  email: { type: String, required: true },
   language: { type: String, required: true },
   rounds: [
     {

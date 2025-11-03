@@ -64,16 +64,16 @@ const deleteUser = async (req, res) => {
     try {
     const { id } = req.params;
     const verfiedId = req.user.id;
-
+    const user = await user.findById(verfiedId);
     if(verfiedId !== id) return res.status(401).json({ message: "Not allowed" });
-
+    
     const deletedUser = await User.findByIdAndDelete(id);
 
     if (!deletedUser) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    await PracticeSession.deleteMany({userId:id});
+    await PracticeSession.deleteMany({email:user.email});
 
     res.status(200).json({
       message: "User deleted successfully.",

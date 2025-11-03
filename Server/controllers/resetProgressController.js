@@ -26,7 +26,7 @@ const resetProgress = async (req, res) => {
 
     // delete all the practiceSessions of that languages user want to rest.
     await PracticeSession.deleteMany({
-      userId,
+      email:user.email,
       language: { $in: languages }
     });
 

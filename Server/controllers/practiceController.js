@@ -22,7 +22,7 @@ const practiceQuestions = async (req, res) => {
       //check if the session is exists(not expired) or not for this userId and language
       // Find an active session
       const existUserSession = await PracticeSession.findOne({
-        userId,
+        email: user.email,
         language,
         expiresAt: { $gt: new Date() } // only sessions that are not expired
       });
@@ -80,7 +80,7 @@ const practiceQuestions = async (req, res) => {
 
       const roundCursor =  uuidv4();
       const session = await PracticeSession.create({
-        userId,
+        email:user.email,
         language,
         rounds: [{ cursor: roundCursor, questionIds: questions.map(q => q._id.toString())}],
         expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000)
@@ -100,7 +100,7 @@ const practiceQuestions = async (req, res) => {
       // perticularSessionId not exists
       if (!perticularSession){
         const existUserSession = await PracticeSession.findOne({
-          userId,
+          email:user.email,
           language,
           expiresAt: { $gt: new Date() } // only sessions that are not expired
         });
@@ -158,7 +158,7 @@ const practiceQuestions = async (req, res) => {
 
         const roundCursor = uuidv4();
         const session = await PracticeSession.create({
-          userId,
+          email:user.email,
           language,
           rounds: [{ cursor: roundCursor, questionIds: questions.map(q => q._id.toString()) }],
           expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000)
@@ -186,7 +186,7 @@ const practiceQuestions = async (req, res) => {
 
         const newRoundCursor = uuidv4();
         const newSession = await PracticeSession.create({
-          userId,
+          email:user.email,
           language,
           rounds: [{ cursor: newRoundCursor, questionIds: notSolvedExpireQuestions.map(q => q._id.toString()) }],
           expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000)
@@ -222,9 +222,10 @@ const submitPractice = async (req, res) => {
   if (!sessionId || !answers ||!cursor) return res.status(400).json({ message: "Missing fields" });
 
   try {
+    const user = await User.findById(userId);
     const session = await PracticeSession.findById(sessionId);
     if (!session) return res.status(400).json({ message: "Invalid session" });
-    if (session.userId.toString() !== userId) return res.status(403).json({ message: "Not allowed" });
+    if (session.email !== user.email) return res.status(403).json({ message: "Not allowed" });
     if (new Date() > session.expiresAt) return res.status(400).json({ message: "Session expired,Please reattempt" });
 
     const round = session.rounds.find(r => r.cursor === cursor);
@@ -303,9 +304,9 @@ const submitPractice = async (req, res) => {
     }
 
     // --- Create NEXT round ---
-    const user = await User.findById(userId);    
-    const solved = user.practice?.find(p => p.language === language)?.solved ?? 0;
-    const completed = user.practice?.find(p => p.language === language)?.completed ?? 0;
+    const updatedUser = await User.findById(userId);
+    const solved = updatedUser.practice?.find(p => p.language === language)?.solved ?? 0;
+    const completed = updatedUser.practice?.find(p => p.language === language)?.completed ?? 0;
     if(completed === 3) return res.status(200).json({message:"you have completed all questions 3 times."})
 
     if (completed !== 3 && solved >= totalCount){
@@ -317,7 +318,15 @@ const submitPractice = async (req, res) => {
             $inc: { "practice.$.completed": 1}
           }
         );
-
+      } else{
+        await User.updateOne(
+          { _id: userId, "practice.language": session.language },
+          {
+            $set: { "practice.$.solved": 0 },
+            $inc: { "practice.$.completed": 1 }
+          }
+        );
+      }
         session.expiresAt = new Date();
         session.save();
 
@@ -328,26 +337,6 @@ const submitPractice = async (req, res) => {
           explanations,
           message: "Completed"
         });
-      }
-
-      await User.updateOne(
-        { _id: userId, "practice.language": session.language },
-        {
-          $set: { "practice.$.solved": 0 },
-          $inc: { "practice.$.completed": 1}
-        }
-      );
-      
-      session.expiresAt = new Date();
-      session.save();
-
-      return res.status(200).json({
-        correctAnswers,
-        totalQues: questions.length,
-        correctCount: correctAnsweredCount,
-        explanations,
-        message: "Completed"
-      });
     }
 
     const nextQuestionsBatch = await Questions.find(
