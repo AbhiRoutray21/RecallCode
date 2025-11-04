@@ -5,6 +5,7 @@ const useRefreshToken = () => {
   const { setAuth } = useAuth();
 
     const refresh = async () => {
+      try {
         const response = await axiosBase.get("/refresh");
         setAuth(prev => {
             return { 
@@ -14,6 +15,9 @@ const useRefreshToken = () => {
             }
         }); 
         return response.data.accessToken;
+      } catch (error) {
+        
+      }
     }
 
   return refresh;
