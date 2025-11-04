@@ -7,13 +7,13 @@ import Homepage from "./components/homepage/homaepage.jsx";
 import MainLayout from './Layouts/MainLayout.jsx';
 import RequireAuth, { GoToHome } from './Layouts/RequiredAuth.jsx';
 import PersistLogin from './Layouts/persistLogin.jsx';
-import AuthLogout from './components/logout/authLogout.jsx';
 import NoSuchPage from './components/noSuchPage.jsx';
 import { Pageloader, PracticeSkeleton, QuestionsPage, SelectiveSkeleton } from './loader/Loader.jsx';
 
 // Lazy load route-level components
 const LoginForm = lazy(() => import('./components/loginPage/login.jsx'));
 const SignupForm = lazy(() => import('./components/signupForm/SignupForm.jsx'));
+const AuthLogout = lazy(() => import('./components/logout/authLogout.jsx'));
 const OtpVerify = lazy(() => import('./components/otpverification/otpverification.jsx'));
 const Forgotpassword = lazy(() => import('./components/forgotPassword/forgotpassword.jsx'));
 const ChangePasswordForm = lazy(() => import('./components/forgotPassword/changepassword.jsx'));
@@ -49,7 +49,9 @@ export default function App() {
           </Route>
         </Route>
 
-        <Route path='/logout' element={<AuthLogout />}/>
+        <Route path='/logout' element={
+          <Suspense fallback={''}><AuthLogout /></Suspense>}
+        />
 
         <Route element={<GoToHome />}>
           <Route path="practiceques/:language" element={
@@ -80,7 +82,6 @@ export default function App() {
         <Route path="/otpverify" element={
           <Suspense fallback={<Pageloader/>}><OtpVerify /></Suspense>} />
 
-      <Route path="/unauthorized" element={''} />
       <Route path="/*" element={<NoSuchPage />}/>
     </Routes>
   );

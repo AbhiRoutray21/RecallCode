@@ -1,10 +1,10 @@
 import { Outlet, useLocation,NavLink } from "react-router-dom";
 import { lazy, Suspense, useEffect, useState } from "react";
 import Sidebar from "../components/sidebar/sidebar";
-import LoginPopMessage from "../components/loginMessage/loginPop";
 import Header from "../components/homepage/Header/header";
 import { MainLayoutProvider } from "../context/MainLayoutContext";
 import useAuth from "../hooks/useAuth";
+const LoginPopMessage = lazy(() => import('../components/loginMessage/loginPop'));
 const SessionExpire = lazy(() => import('../components/sessionExpire/expire'));
 const SettingsPop = lazy(() => import('../components/settings/settings'));
 const DeletePopup = lazy(() => import('../components/settings/Profile/deletePopup'));
@@ -20,11 +20,13 @@ function getItemFromStorage(name) {
 export default function MainLayout() {
   const {auth,expire,deletePopup} = useAuth();
   const [settingsPop, setSettingsPop] = useState(false);
+  const [loginPopup, setLoginPopup] = useState(false);
   const location = useLocation();
   const [consent, setConsent] = useState(() => getItemFromStorage('cookieConsent'));
 
   useEffect(() => {
     setSettingsPop(location.hash.startsWith("#settings"));
+    setLoginPopup(location.hash.startsWith("#login"));
   }, [location.hash]);
 
   function comfirm(){
@@ -44,7 +46,11 @@ export default function MainLayout() {
         </div>
 
         {/* login popup box */}
-        <LoginPopMessage />
+        {loginPopup && !auth?.accessToken &&
+        <Suspense fallback={''}>
+          <LoginPopMessage />
+        </Suspense>
+        } 
 
         {/* cookie consent popup */}
         {auth?.accessToken && !consent &&

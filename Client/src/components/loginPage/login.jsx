@@ -129,7 +129,7 @@ const LoginForm = () => {
                       </button>
                   </div>
 
-                  <a className="forgot" href="/forgot_password">Forgot password?</a>
+                  <Link className="forgot" to="/forgot_password">Forgot password?</Link>
 
                   <div className='login-or'>
                     <span>or</span>
