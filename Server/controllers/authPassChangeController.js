@@ -36,10 +36,8 @@ const authPassChange = async (req, res) => {
     const REFRESH_TOKEN_COOKIE_NAME = 'secure_t';
     const isProduction = process.env.NODE_ENV === 'production';
     const cookie = req.cookies;
-    console.log(cookie);
 
     if(cookie){
-      console.log('clear cookie');
       res.clearCookie(REFRESH_TOKEN_COOKIE_NAME, {
         httpOnly: true,
         domain: process.env.COOKIE_DOMAIN_NAME,
