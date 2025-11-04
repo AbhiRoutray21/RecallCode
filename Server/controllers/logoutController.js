@@ -1,14 +1,12 @@
 const User = require('../model/User');
 const jwt = require('jsonwebtoken');
-
-const isProduction = process.env.NODE_ENV === 'production';
-const REFRESH_TOKEN_COOKIE_NAME = 'secure_t';
+const cookie = require('../config/cookies');
 
 const handleLogout = async (req, res) => {
     // On client, also delete the accessToken
     try {
         const cookies = req.cookies;
-        const refreshTokenName = REFRESH_TOKEN_COOKIE_NAME;
+        const refreshTokenName = cookie.REFRESH_TOKEN_NAME;
 
         if (!cookies?.[refreshTokenName]) {
             // No cookie means user probably already logged out
@@ -26,11 +24,11 @@ const handleLogout = async (req, res) => {
 
         if (!foundUser) {
             // Token reuse or invalid
-            res.clearCookie(REFRESH_TOKEN_COOKIE_NAME, {
+            res.clearCookie(cookie.REFRESH_TOKEN_NAME, {
                 httpOnly: true,
-                domain: process.env.COOKIE_DOMAIN_NAME,
-                secure: isProduction, // only send over HTTPS in production
-                sameSite: isProduction ? 'None' : 'Lax', // change to 'None' if cross-site and ensure secure:true
+                domain: cookie.DOMAIN,
+                secure: cookie.SECURE,
+                sameSite: cookie.SAME_SITE,
             });
             return res.sendStatus(204);
         }
@@ -40,11 +38,11 @@ const handleLogout = async (req, res) => {
         await foundUser.save();
 
         // Clear the cookie on client
-        res.clearCookie(REFRESH_TOKEN_COOKIE_NAME, {
+        res.clearCookie(cookie.REFRESH_TOKEN_NAME, {
             httpOnly: true,
-            domain: process.env.COOKIE_DOMAIN_NAME,
-            secure: isProduction, // only send over HTTPS in production
-            sameSite: isProduction ? 'None' : 'Lax', // change to 'None' if cross-site and ensure secure:true
+            domain: cookie.DOMAIN,
+            secure: cookie.SECURE,
+            sameSite: cookie.SAME_SITE,
         });
 
         return res.status(200).json({ message: "Logged out successfully" });
@@ -52,7 +50,7 @@ const handleLogout = async (req, res) => {
     } catch (err) {
         if (err.name === 'TokenExpiredError') {
             // If token is expired but still has a valid DB record
-            const decoded = jwt.decode(req.cookies?.[REFRESH_TOKEN_COOKIE_NAME]);
+            const decoded = jwt.decode(req.cookies?.[cookie.REFRESH_TOKEN_NAME]);
             if (decoded?.id) {
                 const foundUser = await User.findById(decoded.id).exec();
                 if (foundUser) {
@@ -60,11 +58,11 @@ const handleLogout = async (req, res) => {
                     await foundUser.save();
                 }
             }
-            res.clearCookie(REFRESH_TOKEN_COOKIE_NAME, {
+            res.clearCookie(cookie.REFRESH_TOKEN_NAME, {
                 httpOnly: true,
-                domain: process.env.COOKIE_DOMAIN_NAME,
-                secure: isProduction, // only send over HTTPS in production
-                sameSite: isProduction ? 'None' : 'Lax', // change to 'None' if cross-site and ensure secure:true
+                domain: cookie.DOMAIN,
+                secure: cookie.SECURE,
+                sameSite: cookie.SAME_SITE,
             });
             return res.status(200).json({ message: "Session expired, logged out" });
         }

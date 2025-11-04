@@ -3,13 +3,11 @@ const OTP = require('../model/OTP.js');
 const User = require('../model/User.js');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
+const cookie = require('../config/cookies');
 
 //CONFIG
 const ACCESS_TOKEN_TTL = '10min';
 const REFRESH_TOKEN_TTL = '7d';
-const isProduction = process.env.NODE_ENV === 'production';
-const MAX_COOKIE_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days
-const REFRESH_TOKEN_COOKIE_NAME = 'secure_t';
 
 // constant-time compare function
 function safeCompare(a, b) {
@@ -93,12 +91,12 @@ const verifyOtp = async (req, res) => {
     await user.save();
 
     // Creates Secure Cookie with refresh token
-    res.cookie(REFRESH_TOKEN_COOKIE_NAME, newRefreshToken, {
+    res.cookie(cookie.REFRESH_TOKEN_NAME, newRefreshToken, {
       httpOnly: true,
-      domain: process.env.COOKIE_DOMAIN_NAME,
-      secure: isProduction, // only send over HTTPS in production
-      sameSite: isProduction ? 'None' : 'Lax', // change to 'None' if cross-site and ensure secure:true
-      maxAge: MAX_COOKIE_AGE
+      domain: cookie.DOMAIN,
+      secure: cookie.SECURE,
+      sameSite: cookie.SAME_SITE,
+      maxAge: cookie.MAX_AGE
     });
 
     // Send authorization roles and access token to user

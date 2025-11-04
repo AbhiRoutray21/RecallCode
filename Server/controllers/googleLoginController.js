@@ -6,13 +6,11 @@ const crypto = require('crypto');
 const { v4: uuidv4 } = require('uuid');
 const User = require('../model/User');
 const { capitalizeFirstLetter } = require('../utils/capitalizeFirstLetter');
+const cookie = require('../config/cookies');
 
 //CONFIG
 const ACCESS_TOKEN_TTL = '10min';
 const REFRESH_TOKEN_TTL = '7d';
-const isProduction = process.env.NODE_ENV === 'production';
-const MAX_COOKIE_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days
-const REFRESH_TOKEN_COOKIE_NAME = 'secure_t';
 
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
@@ -89,11 +87,11 @@ exports.googleAuth = async (req, res) => {
 
         user.refreshTokenIds = user.refreshTokenIds || [];
 
-        res.clearCookie(REFRESH_TOKEN_COOKIE_NAME, {
+        res.clearCookie(cookie.REFRESH_TOKEN_NAME, {
           httpOnly: true,
-          domain: process.env.COOKIE_DOMAIN_NAME,
-          secure: isProduction, // only send over HTTPS in production
-          sameSite: isProduction ? 'None' : 'Lax', // change to 'None' if cross-site and ensure secure:true
+          domain: cookie.DOMAIN,
+          secure: cookie.SECURE,
+          sameSite: cookie.SAME_SITE,
         });
 
         user.refreshTokenIds = [...user.refreshTokenIds, newTid];
@@ -101,12 +99,12 @@ exports.googleAuth = async (req, res) => {
         user.lockUntil = null;
         await user.save();
 
-        res.cookie(REFRESH_TOKEN_COOKIE_NAME, newRefreshToken, {
+        res.cookie(cookie.REFRESH_TOKEN_NAME, newRefreshToken, {
           httpOnly: true,
-          domain: process.env.COOKIE_DOMAIN_NAME,
-          secure: isProduction, // only send over HTTPS in production
-          sameSite: isProduction ? 'None' : 'Lax', // change to 'None' if cross-site and ensure secure:true
-          maxAge: MAX_COOKIE_AGE
+          domain: cookie.DOMAIN,
+          secure: cookie.SECURE,
+          sameSite: cookie.SAME_SITE,
+          maxAge: cookie.MAX_AGE
         });
 
         res.status(200).json({

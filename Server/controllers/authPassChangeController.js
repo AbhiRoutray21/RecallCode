@@ -1,5 +1,6 @@
 const User = require('../model/User');
 const bcrypt = require('bcrypt');
+const cookie = require('../config/cookies');
 
 const authPassChange = async (req, res) => {
   try {
@@ -33,16 +34,14 @@ const authPassChange = async (req, res) => {
     await user.save();
 
     //delete old cookie from browser
-    const REFRESH_TOKEN_COOKIE_NAME = 'secure_t';
-    const isProduction = process.env.NODE_ENV === 'production';
-    const cookie = req.cookies;
+    const incomingCookie = req.cookies;
 
-    if(cookie){
-      res.clearCookie(REFRESH_TOKEN_COOKIE_NAME, {
+    if(incomingCookie){
+      res.clearCookie(cookie.REFRESH_TOKEN_NAME, {
         httpOnly: true,
-        domain: process.env.COOKIE_DOMAIN_NAME,
-        secure: isProduction, // only send over HTTPS in production
-        sameSite: isProduction ? 'None' : 'Lax', // change to 'None' if cross-site and ensure secure:true
+        domain: cookie.DOMAIN,
+        secure: cookie.SECURE,
+        sameSite: cookie.SAME_SITE,
       });
     }
 

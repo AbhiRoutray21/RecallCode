@@ -2,6 +2,7 @@ const User = require('../model/User');
 const PracticeSession = require('../model/PracticeSession');
 const Password_reset_token = require('../model/PasswordReset');
 const {formatDateToIST} = require('../utils/formatDateToIST');
+const cookie = require('../config/cookies');
 
 const getUser = async (req, res) => {
     const { id } = req.params;
@@ -62,10 +63,6 @@ const updateUser = async (req, res) => {
 }
 
 const deleteUser = async (req, res) => {
-
-  const isProduction = process.env.NODE_ENV === 'production';
-  const REFRESH_TOKEN_COOKIE_NAME = 'secure_t';
-
   try {
     const { id } = req.params;
     const verfiedId = req.user.id;
@@ -81,11 +78,11 @@ const deleteUser = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.clearCookie(REFRESH_TOKEN_COOKIE_NAME, {
-      httpOnly: true,
-      domain: process.env.COOKIE_DOMAIN_NAME,
-      secure: isProduction, // only send over HTTPS in production
-      sameSite: isProduction ? 'None' : 'Lax', // change to 'None' if cross-site and ensure secure:true
+    res.clearCookie(cookie.REFRESH_TOKEN_NAME, {
+        httpOnly: true,
+        domain: cookie.DOMAIN,
+        secure: cookie.SECURE,
+        sameSite: cookie.SAME_SITE,
     });
           
     res.status(200).json({

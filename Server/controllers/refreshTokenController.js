@@ -2,19 +2,17 @@ const User = require('../model/User');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 require('dotenv').config();
+const cookie = require('../config/cookies');
 
 //CONFIG
 const ACCESS_TOKEN_TTL = '10min';
 const REFRESH_TOKEN_TTL = '7d';
-const isProduction = process.env.NODE_ENV === 'production';
-const MAX_COOKIE_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days
-const REFRESH_TOKEN_COOKIE_NAME = 'secure_t';
 
 const handleRefreshToken = async (req, res) => {
   try {
     const cookies = req.cookies;
-    if (!cookies && !cookies[REFRESH_TOKEN_COOKIE_NAME]) return res.sendStatus(401);
-    const refreshToken = cookies[REFRESH_TOKEN_COOKIE_NAME];
+    if (!cookies && !cookies[cookie.REFRESH_TOKEN_NAME]) return res.sendStatus(401);
+    const refreshToken = cookies[cookie.REFRESH_TOKEN_NAME];
 
     // Step 1: Verify the token signature first
     jwt.verify(
@@ -33,13 +31,12 @@ const handleRefreshToken = async (req, res) => {
 
         if (!foundUser) {
           // Token reuse detected — DB doesn’t have that tokenId
-
-          res.clearCookie(REFRESH_TOKEN_COOKIE_NAME, {
-            httpOnly: true,
-            domain: process.env.COOKIE_DOMAIN_NAME,
-            secure: isProduction, // only send over HTTPS in production
-            sameSite: isProduction ? 'None' : 'Lax', // change to 'None' if cross-site and ensure secure:true
-          });
+            res.clearCookie(cookie.REFRESH_TOKEN_NAME, {
+                httpOnly: true,
+                domain: cookie.DOMAIN,
+                secure: cookie.SECURE,
+                sameSite: cookie.SAME_SITE,
+            });
           return res.sendStatus(403); // Force re-login
         }
 
@@ -74,12 +71,12 @@ const handleRefreshToken = async (req, res) => {
         );
 
         // Step 4: Set new refresh cookie
-        res.cookie(REFRESH_TOKEN_COOKIE_NAME, newRefreshToken, {
+        res.cookie(cookie.REFRESH_TOKEN_NAME, newRefreshToken, {
           httpOnly: true,
-          domain: process.env.COOKIE_DOMAIN_NAME,
-          secure: isProduction, // only send over HTTPS in production
-          sameSite: isProduction ? 'None' : 'Lax', // change to 'None' if cross-site and ensure secure:true
-          maxAge: MAX_COOKIE_AGE
+          domain: cookie.DOMAIN,
+          secure: cookie.SECURE,
+          sameSite: cookie.SAME_SITE,
+          maxAge: cookie.MAX_AGE
         });
 
         // Step 5: Send back new access token + user info

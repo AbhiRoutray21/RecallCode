@@ -7,16 +7,15 @@ const { generateAndHashOTP } = require('../utils/generateOTP');
 const fs = require('fs');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
+const cookie = require('../config/cookies');
 
 // CONFIG
 const MAX_FAILED_ATTEMPTS = 5;
 const LOCK_TIME_MINUTES = 15;
 const OTP_TTL_MS = 5 * 60 * 1000; // 5 minutes
-const isProduction = process.env.NODE_ENV === 'production';
 const ACCESS_TOKEN_TTL = '10min';
 const REFRESH_TOKEN_TTL = '7d';
-const MAX_COOKIE_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days
-const REFRESH_TOKEN_COOKIE_NAME = 'secure_t';
+
 
 // helper to issue tokens
 function signAccessToken(user) {
@@ -150,7 +149,7 @@ const handleLogin = async (req, res) => {
     foundUser.refreshTokenIds = foundUser.refreshTokenIds || []; // array of tid strings
 
     // If there is an incoming cookie, try to detect reuse
-    const incomingCookie = cookies[REFRESH_TOKEN_COOKIE_NAME];
+    const incomingCookie = cookies[cookie.REFRESH_TOKEN_NAME];
 
     if (incomingCookie) {
       try {
@@ -167,11 +166,11 @@ const handleLogin = async (req, res) => {
           foundUser.refreshTokenIds = [];
 
           // Clear the cookie from browser regardless (to prevent the old value persisting)
-          res.clearCookie(REFRESH_TOKEN_COOKIE_NAME, {
+          res.clearCookie(cookie.REFRESH_TOKEN_NAME, {
             httpOnly: true,
-            domain: process.env.COOKIE_DOMAIN_NAME,
-            secure: isProduction, // only send over HTTPS in production
-            sameSite: isProduction ? 'None' : 'Lax', // change to 'None' if cross-site and ensure secure:true
+            domain: cookie.DOMAIN,
+            secure: cookie.SECURE, 
+            sameSite: cookie.SAME_SITE,
           });
           
           // also optionally revoke sessions, update security logs, send alert email to user
@@ -194,12 +193,12 @@ const handleLogin = async (req, res) => {
     await foundUser.save();
 
     // Set the refresh token cookie. Note: sameSite/scope depends on your frontend domain setup.
-    res.cookie(REFRESH_TOKEN_COOKIE_NAME, newRefreshToken, {
+    res.cookie(cookie.REFRESH_TOKEN_NAME, newRefreshToken, {
       httpOnly: true,
-      domain: process.env.COOKIE_DOMAIN_NAME,
-      secure: isProduction, // only send over HTTPS in production
-      sameSite: isProduction ? 'None' : 'Lax', // change to 'None' if cross-site and ensure secure:true
-      maxAge: MAX_COOKIE_AGE  
+      domain: cookie.DOMAIN,
+      secure: cookie.SECURE, 
+      sameSite: cookie.SAME_SITE, 
+      maxAge: cookie.MAX_AGE  
     });
 
     // Return access token and user data. Keep the refresh token only in cookie.
