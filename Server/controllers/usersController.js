@@ -1,5 +1,6 @@
 const User = require('../model/User');
 const PracticeSession = require('../model/PracticeSession');
+const Password_reset_token = require('../model/PasswordReset');
 const {formatDateToIST} = require('../utils/formatDateToIST');
 
 const getUser = async (req, res) => {
@@ -61,20 +62,32 @@ const updateUser = async (req, res) => {
 }
 
 const deleteUser = async (req, res) => {
-    try {
+
+  const isProduction = process.env.NODE_ENV === 'production';
+  const REFRESH_TOKEN_COOKIE_NAME = 'secure_t';
+
+  try {
     const { id } = req.params;
     const verfiedId = req.user.id;
-    const user = await user.findById(verfiedId);
-    if(verfiedId !== id) return res.status(401).json({ message: "Not allowed" });
-    
+    if (verfiedId !== id) return res.status(401).json({ message: "Not allowed" });
+    const user = await User.findById(verfiedId);
+
+    await PracticeSession.deleteMany({ email: user.email });
+    await Password_reset_token.deleteMany({ email: user.email });
+
     const deletedUser = await User.findByIdAndDelete(id);
 
     if (!deletedUser) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    await PracticeSession.deleteMany({email:user.email});
-
+    res.clearCookie(REFRESH_TOKEN_COOKIE_NAME, {
+      httpOnly: true,
+      domain: process.env.COOKIE_DOMAIN_NAME,
+      secure: isProduction, // only send over HTTPS in production
+      sameSite: isProduction ? 'None' : 'Lax', // change to 'None' if cross-site and ensure secure:true
+    });
+          
     res.status(200).json({
       message: "User deleted successfully.",
       deletedUser: {

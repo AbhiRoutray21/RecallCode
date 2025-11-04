@@ -7,6 +7,8 @@ import { MainLayoutProvider } from "../context/MainLayoutContext";
 import useAuth from "../hooks/useAuth";
 const SessionExpire = lazy(() => import('../components/sessionExpire/expire'));
 const SettingsPop = lazy(() => import('../components/settings/settings'));
+const DeletePopup = lazy(() => import('../components/settings/Profile/deletePopup'));
+
 
 /*helper*/
 function getItemFromStorage(name) {
@@ -16,9 +18,8 @@ function getItemFromStorage(name) {
 }
 
 export default function MainLayout() {
-  const {expire} = useAuth();
+  const {auth,expire,deletePopup} = useAuth();
   const [settingsPop, setSettingsPop] = useState(false);
-  const {auth} = useAuth();
   const location = useLocation();
   const [consent, setConsent] = useState(() => getItemFromStorage('cookieConsent'));
 
@@ -66,6 +67,13 @@ export default function MainLayout() {
         {settingsPop && auth.accessToken && (
           <Suspense fallback={''}>
             <SettingsPop />
+          </Suspense>
+        )}
+
+        {/* delete popup */}
+        {deletePopup && auth.accessToken && (
+          <Suspense fallback={''}>
+            <DeletePopup/>
           </Suspense>
         )}
 

@@ -2,7 +2,7 @@ import '../settings.css';
 import { TbEdit } from "react-icons/tb";
 import { IoClose } from "react-icons/io5";
 import {useState,useEffect} from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 import useAuth from '../../../hooks/useAuth';
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
 import axios from "axios";
@@ -16,7 +16,8 @@ const AutoGrowInput = lazy(() => import('./autogrowinput'));
 
 export default function Profile({setSettingsPop}){
     const navigate = useNavigate();
-    const {auth,setAuth} = useAuth();
+    const location = useLocation()
+    const {auth,setAuth,setDeletePopup} = useAuth();
     const axiosPrivate = useAxiosPrivate();
     const [userData, setUserData] = useState({});
     const [loading, setLoading] = useState(true);
@@ -65,26 +66,10 @@ export default function Profile({setSettingsPop}){
         }
     }, []);
 
-    const userDelete = async () =>{
-        try {
-            const response = await axiosPrivate.delete(`/users/${decode.UserInfo.id}`);
-            if (response.status === 200) {
-                toast.success(response.data.message);
-                setAuth({});
-            }
-        } catch (error) {
-            if (!error?.response) {
-                toast.error('no server response')
-            } else if (error.response?.status === 400) {
-                toast.error(error.response.data.message);
-            } else if (error.response?.status === 404) {
-                toast.error(error.response.data.message);
-            } else if (error.response?.status === 500) {
-                toast.error(error.response.data.message);
-            } else {
-                toast.error('Somthing went wrong');
-            }
-        }
+    function openDeletePopup(){
+        setSettingsPop(false);
+        navigate(location.pathname);
+        setDeletePopup(true);
     }
 
     return (
@@ -133,7 +118,7 @@ export default function Profile({setSettingsPop}){
                     </div>
                     <div className='profile-userDetail delete'>
                         <span>Delete Account</span>
-                        <button className='profile-accDelete-btn' onClick={''}>Delete</button>
+                        <button className='profile-accDelete-btn' onClick={openDeletePopup}>Delete</button>
                     </div>
                 </div>
                 </>
