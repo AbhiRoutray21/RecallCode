@@ -10,7 +10,7 @@ const { v4: uuidv4 } = require('uuid');
 const cookie = require('../config/cookies');
 
 // CONFIG
-const MAX_FAILED_ATTEMPTS = 5;
+const MAX_FAILED_ATTEMPTS = 10;
 const LOCK_TIME_MINUTES = 15;
 const OTP_TTL_MS = 5 * 60 * 1000; // 5 minutes
 const ACCESS_TOKEN_TTL = '10min';
@@ -119,14 +119,13 @@ const handleLogin = async (req, res) => {
     if (!match) {
       // Increment failed attempts and possibly lock account
       foundUser.failedLoginAttempts = (foundUser.failedLoginAttempts || 0) + 1;
-      const remain = Math.max(0,MAX_FAILED_ATTEMPTS - (foundUser.failedLoginAttempts || 0));
 
       if (foundUser.failedLoginAttempts >= MAX_FAILED_ATTEMPTS) {
         foundUser.lockUntil = new Date(Date.now() + LOCK_TIME_MINUTES * 60 * 1000);
         foundUser.failedLoginAttempts = 0; // reset after locking
       }
       await foundUser.save();
-      return res.status(401).json({ message:`Invalid credentials. (${remain} attempt remaining)` });
+      return res.status(401).json({ message:`Invalid credentials.` });
     }
 
     // Successful login -> reset failed attempts
