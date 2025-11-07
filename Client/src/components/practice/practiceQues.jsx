@@ -322,6 +322,8 @@ const PracticeQues = () => {
                                             </code>
                                         );
                                     },
+                                    // Prevent links from being clickable
+                                    a: ({ children }) => <span>{children}</span>,
                                 }}
                             >
                                 {`${index + 1}\\. ${q.question}`}

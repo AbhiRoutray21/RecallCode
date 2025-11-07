@@ -168,6 +168,8 @@ const SelectiveQues = () => {
                                                             </code>
                                                         );
                                                     },
+                                                    // Prevent links from being clickable
+                                                    a: ({ children }) => <span>{children}</span>,                       
                                                 }}
                                             >
                                                 {`${tindex + 1}\\.${qindex + 1}\\. ${q.question}`}
