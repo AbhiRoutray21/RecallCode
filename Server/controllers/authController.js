@@ -133,8 +133,8 @@ const handleLogin = async (req, res) => {
     foundUser.lockUntil = null;
 
     // ===== Refresh token rotation + reuse detection using token ids (tid) =====
-    // Maximum number of stored tokens (e.g., 5 devices)
-    const MAX_STORED_REFRESH_TOKENS = 5;
+    // Maximum number of stored tokens (e.g., 3 devices)
+    const MAX_STORED_REFRESH_TOKENS = 3;
     if (foundUser.refreshTokenIds.length >= MAX_STORED_REFRESH_TOKENS) {
       foundUser.refreshTokenIds = foundUser.refreshTokenIds.slice(1,MAX_STORED_REFRESH_TOKENS);
     }
