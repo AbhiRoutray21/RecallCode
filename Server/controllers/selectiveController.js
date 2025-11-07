@@ -37,7 +37,8 @@ const selectiveQuestions = async (req, res) => {
       },
       {
         $facet: topics.reduce((acc, topic) => {
-          acc[topic] = [
+          const safeKey = topic.replace(/\./g, "_"); // replace '.' with '_'
+          acc[safeKey] = [
             { $match: { topic } },
             { $sample: { size: Number(quesPerTopic) } },
             { $project: { difficulty:0 } }
