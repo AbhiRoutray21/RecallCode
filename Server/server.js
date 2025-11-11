@@ -52,6 +52,7 @@ app.use('/passChange', require('./routes/api/passChange'));
 app.use('/practice', require('./routes/api/practice'));
 app.use('/resetProgress', require('./routes/resetProgress'));
 app.use('/selective', require('./routes/api/selective'));
+app.use('/challenge', require('./routes/api/challenge'));
 
 
 app.all('/*splat', (req, res) => {
