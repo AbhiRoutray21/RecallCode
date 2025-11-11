@@ -19,6 +19,7 @@ const Forgotpassword = lazy(() => import('./components/forgotPassword/forgotpass
 const ChangePasswordForm = lazy(() => import('./components/forgotPassword/changepassword.jsx'));
 const Practice = lazy(() => import('./components/practice/practice.jsx'));
 const Selective = lazy(() => import('./components/selective/selective.jsx'));
+const Challenge = lazy(() => import('./components/challenge/challenge.jsx'));
 const TrialQues = lazy(() => import('./components/homepage/TrialQuestions/trialQuestions.jsx'));
 const PracticeQues = lazy(() => import('./components/practice/practiceQues.jsx'));
 const SelectiveQues = lazy(() => import('./components/selective/selectiveQues.jsx'));
@@ -32,8 +33,9 @@ export default function App() {
 
   return (
     <Routes>
-
+      {/*---------------------------------------------------------*/}
       <Route element={<PersistLogin />}>
+      
         <Route element={<MainLayout />}>
           {/* public routes */}
           <Route path="/" element={<Homepage />} />
@@ -45,6 +47,9 @@ export default function App() {
             />
             <Route path="/selective" element={
               <Suspense fallback={<SelectiveSkeleton/>}><Selective /></Suspense>}
+            />
+            <Route path="/challenge" element={
+              <Suspense fallback={<PracticeSkeleton/>}><Challenge /></Suspense>}
             />
           </Route>
         </Route>
@@ -63,6 +68,7 @@ export default function App() {
         </Route>
 
       </Route>
+      {/*---------------------------------------------------------*/}
 
       <Route path="/trial/:language" element={
         <Suspense fallback={<QuestionsPage/>}><TrialQues/></Suspense>} />
