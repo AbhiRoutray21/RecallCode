@@ -23,6 +23,8 @@ const Challenge = lazy(() => import('./components/challenge/challenge.jsx'));
 const TrialQues = lazy(() => import('./components/homepage/TrialQuestions/trialQuestions.jsx'));
 const PracticeQues = lazy(() => import('./components/practice/practiceQues.jsx'));
 const SelectiveQues = lazy(() => import('./components/selective/selectiveQues.jsx'));
+const ChallengeQues = lazy(() => import('./components/challenge/challengeQues.jsx'));
+
 
 export default function App() {
 
@@ -64,6 +66,9 @@ export default function App() {
           />
           <Route path="selectiveques/:language" element={
             <Suspense fallback={<QuestionsPage/>}><SelectiveQues/></Suspense>}
+          />
+          <Route path="challengeques/:language" element={
+            <Suspense fallback={<QuestionsPage/>}><ChallengeQues/></Suspense>}
           />
         </Route>
 

@@ -63,11 +63,18 @@ const Challenge = () => {
     };
 
     // --- Start Challenge handler per language ---
-    const handleStart = (langName) => {
-        const selectedConfig = configs[langName];
-        console.log("Starting Challenge:", { ...selectedConfig, language: langName });
-        toast.success(`Starting ${langName} challenge!`);
-        // navigate(`/challenge/${langName.toLowerCase()}`, { state: selectedConfig });
+    const handleStart = async (langName) => {
+        navigate(`/challengeques/${langName}`, {
+            state: { 
+                fromChallenge: true, 
+                config: {
+                    difficulty: configs[langName].difficulty.toLowerCase(),
+                    questionCount: configs[langName].questionCount,
+                    mode: configs[langName].mode,
+                    timer: configs[langName].timer,
+                } 
+            }
+        });
     };
 
 
@@ -103,7 +110,7 @@ const Challenge = () => {
                                     <div className="config-item">
                                         <span>Difficulty:</span>
                                         <ArrowSelector
-                                            values={["Easy", "Medium", "Hard", "Mix"]}
+                                            values={["Easy", "Medium", "Hard", "Mixed"]}
                                             value={cfg.difficulty}
                                             onChange={(val) => handleChange(lang.name, "difficulty", val)}
                                             loop

@@ -56,7 +56,7 @@ app.use('/challenge', require('./routes/api/challenge'));
 
 
 app.all('/*splat', (req, res) => {
-    res.status(404).json({meggage:"404 Not Found "});
+    res.status(404).json({message:"404 Not Found "});
     if (req.accepts('html')) {
         res.json({ "error": "404 Not Found " });
     } else if (req.accepts('json')) {

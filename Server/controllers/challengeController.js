@@ -16,7 +16,7 @@ const getChallengeQuestions = async (req, res) => {
         _id: 1,
         languageName: 1,
         difficulty: 1,
-        topic: 1,
+        answer: 1,
         question: 1,
         options: 1,
     };
