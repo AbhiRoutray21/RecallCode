@@ -1,0 +1,25 @@
+# Node
+node_modules/
+
+# Env
+.env
+.env.*
+
+# SSL / Certificates
+ssl/
+*.key
+*.crt
+
+# Build outputs
+dist/
+build/
+
+# Logs
+*.log
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
