@@ -1,4 +1,4 @@
-import "./ProgressBar.css";
+import "./progressbar.css";
 
 const ProgressBar = ({ progress = 10,  color = '#5ad66fff' }) => {
   return (

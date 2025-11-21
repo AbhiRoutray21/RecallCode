@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import "./levelBar.css";
+import "./levelbar.css";
 
 export default function LevelBar({
   min = 5,
