@@ -64,7 +64,9 @@ services:
     image: mongo
     container_name: recallcode-mongo
     ports:
-      - "27018:27017"
+      - "27018:27017"     
+       # make sure in prod NO port mapping allowed!!
+       # it should be expose: - "27017" 
     volumes:
       - mongo_data:/data/db
     networks:
