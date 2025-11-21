@@ -1,6 +1,6 @@
-import crypto from 'crypto';
+const crypto = require("crypto");
 
-export function generateAndHashOTP(length = 6) {
+function generateAndHashOTP(length = 6) {
   const min = 10 ** (length - 1);
   const max = 10 ** length - 1;
   const otp = String(crypto.randomInt(min, max + 1));
@@ -9,4 +9,6 @@ export function generateAndHashOTP(length = 6) {
   const otpHash = crypto.createHmac('sha256', secret).update(otp).digest('hex');
 
   return { otp, otpHash };
-}
+};
+
+module.exports = { generateAndHashOTP };

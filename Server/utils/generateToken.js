@@ -1,7 +1,7 @@
-import crypto from 'crypto';
-import bcrypt from 'bcrypt';
+const crypto = require("crypto");
+const bcrypt = require("bcrypt");
 
-export const generateAndHashToken = async () => {
+async function generateAndHashToken(){
   const token = crypto.randomBytes(32).toString('hex');
   const tokenHash = await bcrypt.hash(token, 10);
   const resetId  = crypto.randomBytes(4).toString('hex');
@@ -9,3 +9,4 @@ export const generateAndHashToken = async () => {
   return { token, tokenHash, resetId };
 };
 
+module.exports = {generateAndHashToken}

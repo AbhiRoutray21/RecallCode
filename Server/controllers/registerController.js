@@ -5,7 +5,7 @@ const { Resend } = require('resend');
 
 const User = require('../model/User');
 const OTP = require('../model/OTP');
-const { generateAndHashOTP } = require('../utils/generateOTP.js');
+const { generateAndHashOTP } = require('../utils/generateOtp');
 const { capitalizeFirstLetter } = require('../utils/capitalizeFirstLetter');
 
 // --- Register User + Send OTP ---

@@ -1,4 +1,4 @@
-export function formatDateToIST(date){
+function formatDateToIST(date){
   // Indian Standard Time = UTC + 5 hours 30 minutes
   const IST_OFFSET = 5.5 * 60 * 60 * 1000; // in milliseconds
 
@@ -16,3 +16,5 @@ export function formatDateToIST(date){
   // Return formatted string
   return `${day}-${month}-${year} at ${hours}:${minutes}`;
 };
+
+module.exports = {formatDateToIST};

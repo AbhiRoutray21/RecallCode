@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const { Resend } = require('resend');
 const OTP = require('../model/OTP');
 const User = require('../model/User');
-const { generateAndHashOTP } = require('../utils/generateOTP');
+const { generateAndHashOTP } = require('../utils/generateOtp');
 const fs = require('fs');
 const path = require('path');
 
