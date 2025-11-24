@@ -7,9 +7,7 @@ pipeline {
             steps {
                 echo "Injecting client environment variables..."
                 withCredentials([file(credentialsId: 'Client_env', variable: 'CLIENT_ENV')]) {
-                    sh """
-                        cp $CLIENT_ENV Client/.env
-                    """
+                    sh "cp $CLIENT_ENV Client/.env"
                 }
             }
         }
@@ -18,9 +16,7 @@ pipeline {
             steps {
                 echo "Injecting backend environment variables..."
                 withCredentials([file(credentialsId: 'backend_env', variable: 'SERVER_ENV')]) {
-                    sh """
-                        cp $SERVER_ENV Server/.env
-                    """
+                    sh "cp $SERVER_ENV Server/.env"
                 }
             }
         }
@@ -28,21 +24,14 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 echo "Building Docker images..."
-                sh """
-                   cd ${env.WORKSPACE}
-                   docker compose -f docker-compose.yml build
-                """
+                sh "docker compose build"
             }
         }
 
         stage('Deploy Containers') {
             steps {
                 echo "Starting new containers..."
-                sh """
-                    cd ${env.WORKSPACE}
-                    docker compose -f docker-compose.yml down
-                    docker compose -f docker-compose.yml up -d
-                """
+                sh "docker compose down && docker compose up -d"
             }
         }
     }
