@@ -2,12 +2,47 @@ pipeline {
     agent any
 
     stages {
-        stage('Test Git Pull') {
+
+        stage('Inject Client .env') {
             steps {
-                echo "If you see this message, Jenkins successfully pulled the code."
-                sh "ls -la"
-                sh "git log -1 --oneline || true"
+                echo "Injecting client environment variables..."
+                withCredentials([file(credentialsId: 'Client_env', variable: 'CLIENT_ENV')]) {
+                    sh """
+                        cp $CLIENT_ENV Client/.env
+                    """
+                }
+            }
+        }
+
+        stage('Inject Server .env') {
+            steps {
+                echo "Injecting backend environment variables..."
+                withCredentials([file(credentialsId: 'backend_env', variable: 'SERVER_ENV')]) {
+                    sh """
+                        cp $SERVER_ENV Server/.env
+                    """
+                }
+            }
+        }
+
+        stage('Build Docker Images') {
+            steps {
+                echo "Building Docker images..."
+                sh """
+                    docker compose build --no-cache
+                """
+            }
+        }
+
+        stage('Deploy Containers') {
+            steps {
+                echo "Starting new containers..."
+                sh """
+                    docker compose down
+                    docker compose up -d
+                """
             }
         }
     }
+
 }
