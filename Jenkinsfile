@@ -15,7 +15,7 @@ pipeline {
         stage('Inject Server .env') {
             steps {
                 echo "Injecting backend environment variables..."
-                withCredentials([file(credentialsId: 'backend_env', variable: 'SERVER_ENV')]) {
+                withCredentials([file(credentialsId: 'Server_env', variable: 'SERVER_ENV')]) {
                     sh "cp $SERVER_ENV Server/.env"
                 }
             }
