@@ -29,7 +29,7 @@ pipeline {
             steps {
                 echo "Building Docker images..."
                 sh """
-                    docker compose build --no-cache
+                    docker compose build
                 """
             }
         }
