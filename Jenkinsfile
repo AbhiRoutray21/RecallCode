@@ -30,7 +30,7 @@ pipeline {
                 echo "Building Docker images..."
                 sh """
                    cd ${env.WORKSPACE}
-                   docker compose -f docker-compose.yml build --no-cache
+                   docker compose -f docker-compose.yml build
                 """
             }
         }
