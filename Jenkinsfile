@@ -29,7 +29,8 @@ pipeline {
             steps {
                 echo "Building Docker images..."
                 sh """
-                    docker compose build
+                   cd ${env.WORKSPACE}
+                   docker compose -f docker-compose.yml build --no-cache
                 """
             }
         }
@@ -38,8 +39,9 @@ pipeline {
             steps {
                 echo "Starting new containers..."
                 sh """
-                    docker compose down
-                    docker compose up -d
+                    cd ${env.WORKSPACE}
+                    docker compose -f docker-compose.yml down
+                    docker compose -f docker-compose.yml up -d
                 """
             }
         }
