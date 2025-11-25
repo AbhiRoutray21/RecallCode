@@ -64,17 +64,18 @@ const Challenge = () => {
 
     // --- Start Challenge handler per language ---
     const handleStart = async (langName) => {
-        navigate(`/challengeques/${langName}`, {
-            state: { 
-                fromChallenge: true, 
-                config: {
-                    difficulty: configs[langName].difficulty.toLowerCase(),
-                    questionCount: configs[langName].questionCount,
-                    mode: configs[langName].mode,
-                    timer: configs[langName].timer,
-                } 
-            }
-        });
+        // navigate(`/challengeques/${langName}`, {
+        //     state: { 
+        //         fromChallenge: true, 
+        //         config: {
+        //             difficulty: configs[langName].difficulty.toLowerCase(),
+        //             questionCount: configs[langName].questionCount,
+        //             mode: configs[langName].mode,
+        //             timer: configs[langName].timer,
+        //         } 
+        //     }
+        // });
+        navigate("#challengeQues");
     };
 
 

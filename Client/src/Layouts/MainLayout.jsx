@@ -8,7 +8,7 @@ const LoginPopMessage = lazy(() => import('../components/loginMessage/loginPop')
 const SessionExpire = lazy(() => import('../components/sessionExpire/expire'));
 const SettingsPop = lazy(() => import('../components/settings/settings'));
 const DeletePopup = lazy(() => import('../components/settings/Profile/deletePopup'));
-
+const ComingSoonPopup = lazy(() => import('../components/challenge/comingSoon/comingSoon'));
 
 /*helper*/
 function getItemFromStorage(name) {
@@ -21,12 +21,14 @@ export default function MainLayout() {
   const {auth,expire,deletePopup} = useAuth();
   const [settingsPop, setSettingsPop] = useState(false);
   const [loginPopup, setLoginPopup] = useState(false);
+  const [comingSoonPopup, setComingSoonPopup] = useState(false);
   const location = useLocation();
   const [consent, setConsent] = useState(() => getItemFromStorage('cookieConsent'));
 
   useEffect(() => {
     setSettingsPop(location.hash.startsWith("#settings"));
     setLoginPopup(location.hash.startsWith("#login"));
+    setComingSoonPopup(location.hash.startsWith("#challengeQues"));
   }, [location.hash]);
 
   function comfirm(){
@@ -80,6 +82,13 @@ export default function MainLayout() {
         {deletePopup && auth.accessToken && (
           <Suspense fallback={''}>
             <DeletePopup/>
+          </Suspense>
+        )}
+
+        {/* comingSoon popup */}
+        {comingSoonPopup && auth?.accessToken && (
+          <Suspense fallback={''}>
+            <ComingSoonPopup setComingSoonPopup={setComingSoonPopup}/>
           </Suspense>
         )}
 
