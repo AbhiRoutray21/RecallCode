@@ -215,7 +215,7 @@ export default function Sidebar() {
                             learning progress until you log back in.
                         </p>
                         <div className="logoutPop-buttons">
-                            <button className="logoutPop-cancle" onClick={()=>setlogoutPop(false)}>Cancle</button>
+                            <button className="logoutPop-cancle" onClick={()=>setlogoutPop(false)}>Cancel</button>
                             <button className="logoutPop-logout" onClick={()=>{navigate('/logout');setlogoutPop(false);}}>Log out</button>
                         </div>
                     </motion.div>

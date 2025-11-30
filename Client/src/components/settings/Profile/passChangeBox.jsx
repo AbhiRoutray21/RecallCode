@@ -186,7 +186,7 @@ function PassChangeBox({ userData,setOpenPassBox }) {
                     {loading 
                         ?<Spinner size='20px' color='var(--text-color)' speed='1.6s'/>
                         :<button type="button" onClick={()=>setOpenPassBox(false)} className="cancle-btn-auth">
-                            Cancle
+                            Cancel
                         </button>
                     }
                     <button type="submit" className="confirm-btn-auth">
