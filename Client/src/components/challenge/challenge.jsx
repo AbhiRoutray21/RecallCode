@@ -168,11 +168,17 @@ const Challenge = () => {
                             <p onClick={() => setSubInfo(prev => ({ ...prev, 'Challenge': false }))}>Got it</p>
                         </div>
                         <ul>
-                            <li>You will get <b>20 unique questions</b> in every set. ✅</li>
+                            <li>Adjust <b>Difficulty</b>, <b>Questions</b>, <b>Mode</b>, and <b>Timer</b> to design your own challenging test.</li>
                             <div style={{ borderBottom: '1px solid var(--borderbold-color)', width: '95%', margin: '10px auto' }} />
-                            <li>If you refresh during test, you'll be redirected back to home page and must reattempt. 🔄</li>
+                            <li>You must answer all questions to complete the challenge ✅</li>
                             <div style={{ borderBottom: '1px solid var(--borderbold-color)', width: '95%', margin: '10px auto' }} />
-                            <li>Completing all questions will earn you a <b>Star</b>. ☆ → ⭐</li>
+                            <li>Skipping a question or running out of time counts as incorrect ❌</li>
+                            <div style={{ borderBottom: '1px solid var(--borderbold-color)', width: '95%', margin: '10px auto' }} />    
+                            <li>Scores are calculated based on accuracy and time efficiency ⭐</li>
+                            <div style={{ borderBottom: '1px solid var(--borderbold-color)', width: '95%', margin: '10px auto' }} />
+                            <li>Once the challenge starts, settings cannot be changed 🔒</li>
+                            <div style={{ borderBottom: '1px solid var(--borderbold-color)', width: '95%', margin: '10px auto' }} />
+                            <li>Refreshing or leaving the page will end the challenge 🚫</li>
                         </ul>
                     </div>
                 </div>
