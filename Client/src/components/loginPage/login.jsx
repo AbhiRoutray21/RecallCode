@@ -31,6 +31,12 @@ const LoginForm = () => {
       const response = await axiosBase.post("/auth",formData);
       if(response.status === 200){
         const {accessToken,name} = response?.data;
+        // GA4 login tracking (safe)
+        if (window.gtag) {
+            window.gtag('event', 'login_success', {
+                method: 'email'
+            });
+        }
         setAuth({accessToken,name});
         navigate(from, { replace: true });
       }
