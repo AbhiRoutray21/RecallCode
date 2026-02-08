@@ -54,6 +54,7 @@ exports.googleAuth = async (req, res) => {
         const hashedPassword = await bcrypt.hash(randomPassword, 12);
         
         let user = await User.findOne({ email });
+        let isNewUser = false;
 
         if (!user) {
             user = await User.create({
@@ -63,6 +64,7 @@ exports.googleAuth = async (req, res) => {
                 googleLogin: true,
                 isVerified: true,
             });
+            isNewUser = true;
         } else if(user && !user.lockUntil && !user.isVerified){
             await User.findOneAndDelete({email});
             user = await User.create({
@@ -72,6 +74,7 @@ exports.googleAuth = async (req, res) => {
                 googleLogin: true,
                 isVerified: true,
             });
+            isNewUser = true;
         }
 
         if (user.lockUntil && user.lockUntil > new Date()) {
@@ -110,7 +113,8 @@ exports.googleAuth = async (req, res) => {
         res.status(200).json({
             message: 'success',
             accessToken,
-            name: user.name
+            name: user.name,
+            isNewUser
         });
     } catch (err) {
         res.status(500).json({

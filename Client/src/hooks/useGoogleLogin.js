@@ -14,7 +14,19 @@ const useGoolgeLogin = (setLoading) => {
 			if (authResult.code) {
 				const response = await axiosBase.get(`/auth/google?code=${authResult.code}`);
 				if(response.status === 200){
-					const {accessToken,name} = response?.data;
+					const {accessToken,name,isNewUser} = response?.data;
+					// G4 Signup tracking (only once)
+					if (isNewUser && window.gtag) {
+						window.gtag('event', 'signup_success', {
+							method: 'google'
+						});
+					}
+					// GA4 login tracking (safe,everytime)
+					if (window.gtag) {
+						window.gtag('event', 'login_success', {
+							method: 'google'
+						});
+					}
 					setAuth({accessToken,name});
 					navigate('/',{ replace: true });
 				}

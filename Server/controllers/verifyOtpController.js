@@ -103,7 +103,8 @@ const verifyOtp = async (req, res) => {
     res.status(200).json({ 
       accessToken, 
       name:user.name,
-      message: 'Email verified successfully' 
+      message: 'Email verified successfully', 
+      isNewUser: true
     });
 
   } catch (err) {

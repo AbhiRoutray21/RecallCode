@@ -67,7 +67,19 @@ const OtpVerify = () => {
         const response = await axiosBase.post("/verifyOtp", { email, otp });
         if (response.status == 200) {
           sessionStorage.removeItem('email');
-          const {accessToken,name} = response?.data;
+          const {accessToken,name,isNewUser} = response?.data;
+          // G4 Signup tracking
+					if (isNewUser && window.gtag) {
+						window.gtag('event', 'signup_success', {
+							method: 'email'
+						});
+					}
+					// GA4 login tracking 
+					if (window.gtag) {
+						window.gtag('event', 'login_success', {
+							method: 'email'
+						});
+					}
           setAuth({accessToken,name});
           toast.success(response.data.message);
           navigate('/');
