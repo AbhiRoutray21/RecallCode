@@ -1,36 +1,68 @@
-
 # Privacy Policy
 
-At **RecallCode**, we take your privacy seriously. This policy explains how we collect, use, and protect your personal data when you use our platform.
+At **RecallCode**, we respect your privacy and are committed to protecting your personal data. This Privacy Policy explains what information we collect, how we use it, and how we keep it secure when you use our platform.
 
 ### 1. Information We Collect
-We collect limited data necessary to provide and improve your experience, including:
-- Basic account information: name, email, and password.
-- Activity data: quiz attempts, progress, and preferred coding languages.
-- Device or browser data: to optimize performance and fix issues.
+We collect only the information necessary to operate and improve RecallCode, including:
+- Account information such as name, email address, and encrypted password (for email-based accounts).
+- Authentication details received during Google login (name and email address).
+- Learning activity data such as quiz attempts, progress, and selected programming topics.
+- Basic technical data like browser type and device information to improve performance and reliability.
+
+We do not collect sensitive personal data such as payment information, government IDs, or precise location data.
 
 ### 2. How We Use Your Data
 We use your information to:
-- Authenticate your login and maintain your account.
-- Track progress and personalize your learning experience.
-- Improve RecallCode’s features and user interface.
-- Send occasional updates or notifications related to your activity.
+- Authenticate users and manage secure login sessions.
+- Create and maintain user accounts.
+- Track learning progress and personalize content.
+- Improve platform performance, usability, and features.
+- Analyze usage trends to better understand how RecallCode is used.
 
-### 3. Cookies
-RecallCode uses cookies to keep you logged in and remember your preferences. These cookies do not contain sensitive information and can be deleted anytime from your browser settings.
+### 3. Analytics & Tracking
+RecallCode uses Google Analytics (GA4) to understand how users interact with the platform.  
+This helps us collect anonymous usage statistics such as:
+- Pages visited
+- Login and signup events
+- General interaction patterns
 
-### 4. Data Security
-We use secure encryption and authentication protocols to keep your data safe. While we take every precaution to protect user information, no online platform is 100% immune to risks.
+We do not send personal information such as email addresses, names, or authentication tokens to analytics services.  
+You may block analytics tracking using browser settings or ad-blocking tools if you prefer.
+
+### 4. Cookies & Local Storage
+RecallCode uses cookies and browser storage to:
+- Maintain secure login sessions.
+- Store authentication tokens.
+- Remember user preferences.
+
+These cookies do not store sensitive personal information and are required for core functionality.  
+You may clear them at any time from your browser settings, which may log you out.
 
 ### 5. Third-Party Services
-If RecallCode integrates with external tools (like Google login or analytics), those services have their own privacy policies. We recommend reviewing them before use.
+RecallCode integrates with trusted third-party services, including:
+- Google Login for authentication.
+- Google Analytics for usage analysis.
 
-### 6. Data Deletion
-You may delete your account and associated data anytime through your **Account Settings** page.  
-Please note that some non-sensitive data may be securely retained in our database to enhance user experience and support personalized content recommendations in future sessions.  
-This helps RecallCode provide a smoother login process and suggest preferred learning materials based on prior usage.
+These services operate under their own privacy policies. We recommend reviewing their policies to understand how they handle data.
 
-### 7. Changes to This Policy
-We may update this Privacy Policy periodically. Continued use of RecallCode after any change implies acceptance of the new terms.
+### 6. Data Security
+We use industry-standard security measures such as:
+- Encrypted passwords
+- Secure authentication tokens
+- Protected APIs and server infrastructure
 
-If you have any privacy-related concerns, please contact us at **support@recallcode.cloud**.
+While we take strong precautions, no online platform can guarantee complete security.
+
+### 7. Data Retention & Deletion
+You may delete your account and associated personal data at any time through the **Account Settings** page.
+
+After deletion:
+- Personal account data is removed or anonymized.
+- Limited non-identifiable data (such as aggregated usage statistics) may be retained for system improvement and analytics.
+
+### 8. Changes to This Policy
+We may update this Privacy Policy from time to time.  
+Any changes will be reflected on this page, and continued use of RecallCode implies acceptance of the updated policy.
+
+### 9. Contact Us
+If you have any questions or concerns regarding this Privacy Policy or your data, please contact us at **support@recallcode.cloud**

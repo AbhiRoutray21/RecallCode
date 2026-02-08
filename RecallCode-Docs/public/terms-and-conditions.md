@@ -1,52 +1,52 @@
 # Terms and Conditions
 
-Welcome to **RecallCode**! These Terms and Conditions (“Terms”) explain how you can use our platform and its services.  
-By using RecallCode, you agree to follow these Terms. Please read them carefully.
+Welcome to **RecallCode**! These Terms and Conditions (“Terms”) explain how you may use our platform and services.  
+By accessing or using RecallCode, you agree to comply with these Terms. Please read them carefully.
 
 ### 1. Acceptance of Terms
-By creating an account or using RecallCode, you confirm that you have read and agreed to these Terms and our Privacy Policy.  
+By creating an account or using RecallCode, you confirm that you have read, understood, and agreed to these Terms and our **Privacy Policy**.
 
-### 2. Who Can Use RecallCode
-RecallCode is open to learners of all ages and backgrounds.  
-Anyone who wants to improve their coding knowledge and skills can use the platform.  
+### 2. Eligibility
+RecallCode is intended for learners who want to improve their programming and problem-solving skills.  
+If you are under the age required by local law to use online services, you should use RecallCode with the consent of a parent or guardian.
 
 ### 3. User Responsibilities
-You agree to use RecallCode respectfully and for learning purposes only. Please don’t:
-- Use the platform in any way that breaks laws or harms others.  
-- Try to hack, damage, or gain unauthorized access to our systems.  
-- Copy or distribute RecallCode content without permission.  
-- Pretend to be someone else or share your account details with others.
+You agree to use RecallCode respectfully and only for lawful, educational purposes. You must not:
+- Use the platform in a way that violates any laws or regulations.
+- Attempt to hack, disrupt, or gain unauthorized access to our systems.
+- Copy, reproduce, or distribute RecallCode content without permission.
+- Impersonate another person or share your account credentials with others.
 
 ### 4. Account and Security
-You are responsible for your account information and password.  
-If you notice any unusual activity, please contact us right away at **support@recallcode.com**.
+You are responsible for maintaining the confidentiality of your account and login credentials.  
+If you notice any unauthorized access or suspicious activity, please notify us immediately at **support@recallcode.cloud**.
 
-### 5. Ownership and Copyright
-All content, including text, graphics, code examples, and design, belongs to RecallCode.  
-Please don’t copy or reuse our materials without written permission.
+### 5. Intellectual Property
+All platform content, including text, design, branding, and code examples, is owned by RecallCode or its licensors and is protected by copyright laws.  
+You may not reuse or redistribute this content without prior written permission.
 
-### 6. User Content
-If you share content such as quiz questions, ideas, or feedback, you still own it.  
-You allow RecallCode to use that content to improve and display on the platform.
+### 6. User-Generated Content
+If you submit content such as feedback, suggestions, or quiz contributions, you retain ownership of that content.  
+By submitting it, you grant RecallCode a non-exclusive right to use, display, and improve the platform using that content.
 
 ### 7. Data and Privacy
-Your privacy matters to us.  
-Read our **Privacy Policy** to understand how your data is collected, used, and protected.
+Your privacy is important to us.  
+Please review our **Privacy Policy** to understand how we collect, use, and protect your data, including analytics and authentication-related information.
 
-### 8. Account Deletion
-You can delete your account anytime through your **Account Settings** page.  
-We may also remove accounts that violate these Terms or misuse the platform.
+### 8. Account Termination
+You may delete your account at any time through the **Account Settings** page.  
+RecallCode reserves the right to suspend or terminate accounts that violate these Terms or misuse the platform.
 
 ### 9. Disclaimer
-RecallCode is provided “as-is.” We do our best to keep it running smoothly, but we can’t promise it will always be perfect or error-free.
+RecallCode is provided on an “as-is” and “as-available” basis.  
+While we strive to provide a reliable and high-quality learning experience, we do not guarantee uninterrupted or error-free operation.
 
 ### 10. Limitation of Liability
-RecallCode and its team are not responsible for any loss, damage, or inconvenience that may happen while using the platform.  
-We aim to make RecallCode reliable and helpful, but some issues may occur beyond our control.
+To the maximum extent permitted by law, RecallCode and its team shall not be liable for any direct or indirect loss, damage, or inconvenience arising from the use of the platform.
 
-### 11. Changes to Terms
-We may update these Terms occasionally. When we do, we’ll post the updated version here and **notify you about important changes**.  
-Continuing to use RecallCode means you accept the new Terms.
+### 11. Changes to These Terms
+We may update these Terms from time to time. Any changes will be posted on this page, and significant updates may be communicated to users.  
+Continued use of RecallCode after changes means you accept the revised Terms.
 
 ### 12. Contact Us
-If you have questions, feedback, or concerns, you can reach us at: **support@recallcode.com**
+If you have questions, feedback, or concerns regarding these Terms, please contact us at **support@recallcode.cloud**
