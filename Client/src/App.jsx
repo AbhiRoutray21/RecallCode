@@ -67,9 +67,9 @@ export default function App() {
           <Route path="selectiveques/:language" element={
             <Suspense fallback={<QuestionsPage/>}><SelectiveQues/></Suspense>}
           />
-          {/* <Route path="challengeques/:language" element={
+          <Route path="challengeques/:language" element={
             <Suspense fallback={<QuestionsPage/>}><ChallengeQues/></Suspense>}
-          /> */}
+          />
         </Route>
 
       </Route>

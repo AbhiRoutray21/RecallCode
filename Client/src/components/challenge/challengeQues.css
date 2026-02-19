@@ -43,12 +43,21 @@
   font-size: 16px;
   font-weight: 600;
   width: max-content;
+  min-width: 160px;
   margin: 0 auto;
   margin-bottom: 14px;
   padding: 12px;
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.challengeQues-score{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .challengeQues-top-message{
@@ -113,6 +122,16 @@
 }
 
 .challengeQues-question-card {
+  background: var(--bg-box-color);
+  border: 1px solid var(--box-border);
+  border-radius: 18px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+.challengeQues-solo-question-card{
+  max-width: 550px;
+  margin: auto;
+  margin-top: 100px;
   background: var(--bg-box-color);
   border: 1px solid var(--box-border);
   border-radius: 18px;
@@ -213,39 +232,6 @@
 
 
 /*-------------------------------*/
-.challengeQues-submit-wrapper {
-  display: flex;
-  justify-content: center;
-  gap: 60px;
-  margin: 0 auto;
-  margin-top: 40px;
-  /* border: 1px solid white; */
-  width: max-content;
-}
-
-.challengeQues-submit-btn {
-  background-color: var(--p-submit-color);
-  color: var(--text-color);
-  font-size: 18px;
-  padding: 10px 22px;
-  border: none;
-  border-radius: 99px;
-  cursor: pointer;
-  transition: background 0.20s;
-}
-.challengeQues-submit-btn span{
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.challengeQues-submit-btn:hover {
-  background-color: var(--p-submit-hover);
-}
-.challengeQues-submit-btn:active {
-  background-color: var(--p-submit-color);
-}
-
 .challengeQues-loading {
   text-align: center;
   padding: 20px;
@@ -262,6 +248,42 @@
   white-space: pre-wrap;  
   word-break: break-word; 
 }
+
+.challengeQues-solo-infobar{
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 8px 10px 5px;
+}
+
+.challengeQues-next-div{
+  text-align: right;
+}
+/* Solo Mode Next / Submit Button */
+.challengeQues-next-btn {
+  padding: 10px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 11px;
+  border: none;
+  background: var(--bg-s-color);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4); */
+}
+
+/* Active Click */
+.challengeQues-next-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* Disabled */
+.challengeQues-next-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
 
 @media (max-width: 412px) {
 .challengeQues-container::-webkit-scrollbar{
@@ -290,131 +312,5 @@
 }
 .challengeQues-next-cancle-div p{
   width: 150px;
-}
-}
-
-/*----------Leave Popup------------*/
-.challengeQues-leave-field {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-  background-color: var(--blur-background);
-  backdrop-filter: blur(2px);
-}
-
-.challengeQues-leavebox {
-  position: absolute;
-  max-width: 400px;
-  width: 100%;
-  height: 250px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border: 1px solid var(--box-border);
-  border-radius: 23px;
-  background-color: var(--bg-box-color);
-  box-shadow: 0px 0px 10px rgba(13, 13, 13, 0.134);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-  padding: 0 30px;
-}
-
-.challengeQues-leave-message {
-  width: 300px;
-  font-family: 'Montserrat', sans-serif;
-  color: var(--text-color);
-  margin-bottom: -10px;
-  /* border: 1px solid; */
-}
-
-.challengeQues-leave-message p {
-  width: max-content;
-  margin: 0 auto;
-  color: var(--text-color);
-  font-size: 25px;
-  font-weight: 600;
-  margin-bottom: 5px;
-}
-
-.challengeQues-leave-message div {
-  color: var(--text-color);
-  width: 250px;
-  margin: 0 auto;
-  font-size: 18px;
-  font-weight: 400;
-  text-align: center;
-  opacity: 0.8;
-  /* border: 1px solid; */
-
-}
-
-.challengeQues-leave-buttons {
-  /* border: 1px solid white; */
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.challengeQues-leave-buttons button {
-  height: 45px;
-  border: none;
-  border-radius: 25px;
-  font-family: Arial, Helvetica, sans-serif;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.challengeQues-leave-confirm {
-  background-color: var(--text-color);
-  border: 1px solid var(--text-color);
-  color: var(--text-invert-color);
-}
-
-.challengeQues-leave-cancle {
-  background-color: transparent;
-  outline: 1px solid var(--borderbold-color);
-  color: var(--text-color);
-}
-
-.challengeQues-leave-confirm:hover {
-  font-size: 15px;
-  cursor: pointer;
-  color: var(--text-invert-color);
-}
-
-.challengeQues-leave-cancle:hover {
-  background-color: rgba(70, 70, 70, 0.418);
-  outline: 1px solid var(--borderbold-color);
-  color: var(--text-color);
-  cursor: pointer;
-}
-
-.challengeQues-leave-cancle:active {
-  background-color: transparent;
-  outline: 1px solid var(--borderbold-color);
-  color: var(--text-color);
-}
-
-.challengeQues-spinner-div{
-  padding-top: 40px;
-  display: flex;
-  justify-content: center;
-}
-
-@media (max-width: 412px) {
-.challengeQues-leave-field {
-  z-index: 3;
-}
-
-.challengeQues-leavebox {
-  max-width: 350px;
-  padding: 0 20px;
 }
 }

@@ -8,8 +8,8 @@ const User = parseInt(process.env.User);
 router.route('/questions')
     .post(verifyRoles(User), ChallengeController.getChallengeQuestions);
 
-// router.route('/submit')
-//     .post(verifyRoles(User), PracticeController.submitPractice);
+router.route('/submit')
+    .post(verifyRoles(User), ChallengeController.submitChallenge);
 
 // router.route('/data')
 //     .get(verifyRoles(User), PracticeController.practiceData);    

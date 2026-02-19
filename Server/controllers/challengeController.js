@@ -1,110 +1,136 @@
-const Questions = require('../model/Languages');
+const Questions = require("../model/Languages");
+
+// ------------------- GET QUESTIONS -------------------
 
 const getChallengeQuestions = async (req, res) => {
-  try {   
-    const { languageName, difficulty, questionCount, mode, timer } = req.body;
+  try {
+    const { languageName, difficulty, questionCount } = req.body;
 
     if (!languageName || !difficulty || !questionCount)
-        return res.status(400).json({ message: "Missing required fields" });
+      return res.status(400).json({ message: "Missing required fields" });
 
     const count = parseInt(questionCount);
-    if (isNaN(count) || count < 1 || count > 20)
-        return res.status(400).json({ message: "Invalid question count" });
 
-    // Common projection (hide answers for challenge start)
     const projection = {
-        _id: 1,
-        languageName: 1,
-        difficulty: 1,
-        answer: 1,
-        question: 1,
-        options: 1,
+      _id: 1,
+      languageName: 1,
+      difficulty: 1,
+      question: 1,
+      options: 1, // NO answer sent
     };
 
     let questions = [];
 
-    // ----------------------------------------------------------------
-    // CASE 1: MIXED DIFFICULTY
-    // ----------------------------------------------------------------
     if (difficulty === "mixed") {
-        // Define distribution ratios
-        const ratios = { easy: 0.3, medium: 0.4, hard: 0.3 };
+      const easyCount = Math.floor(count * 0.3);
+      const medCount = Math.floor(count * 0.4);
+      const hardCount = count - easyCount - medCount;
 
-        // Compute how many per difficulty
-        const easyCount = Math.max(1, Math.round(count * ratios.easy));
-        const medCount = Math.max(1, Math.round(count * ratios.medium));
-        const hardCount = Math.max(1, Math.round(count * ratios.hard));
-
-        // Fetch random samples for each difficulty
-        const [easyQs, medQs, hardQs] = await Promise.all([
+      const [easyQs, medQs, hardQs] = await Promise.all([
         Questions.aggregate([
-            { $match: { languageName, difficulty: "easy" } },
-            { $sample: { size: easyCount } },
-            { $project: projection },
+          { $match: { languageName, difficulty: "easy" } },
+          { $sample: { size: easyCount } },
+          { $project: projection },
         ]),
         Questions.aggregate([
-            { $match: { languageName, difficulty: "medium" } },
-            { $sample: { size: medCount } },
-            { $project: projection },
+          { $match: { languageName, difficulty: "medium" } },
+          { $sample: { size: medCount } },
+          { $project: projection },
         ]),
         Questions.aggregate([
-            { $match: { languageName, difficulty: "hard" } },
-            { $sample: { size: hardCount } },
-            { $project: projection },
+          { $match: { languageName, difficulty: "hard" } },
+          { $sample: { size: hardCount } },
+          { $project: projection },
         ]),
-        ]);
+      ]);
 
-        // Merge them all
-        questions = [...easyQs, ...medQs, ...hardQs];
-
-        // Fallback: if fewer than requested (DB doesn’t have enough)
-        if (questions.length < count) {
-        const extraNeeded = count - questions.length;
-        const extra = await Questions.aggregate([
-            { $match: { languageName } },
-            { $sample: { size: extraNeeded } },
-            { $project: projection },
-        ]);
-        questions = [...questions, ...extra];
-        }
-    }
-
-    // ----------------------------------------------------------------
-    // CASE 2: SINGLE DIFFICULTY (Easy / Medium / Hard)
-    // ----------------------------------------------------------------
-    else {
-        questions = await Questions.aggregate([
+      questions = [...easyQs, ...medQs, ...hardQs];
+    } else {
+      questions = await Questions.aggregate([
         { $match: { languageName, difficulty } },
         { $sample: { size: count } },
         { $project: projection },
-        ]);
+      ]);
     }
 
-    if (!questions.length)
-        return res.status(404).json({ message: "No questions found for this setup" });
-
-    // ----------------------------------------------------------------
-    // Shuffle once more to randomize order (especially for mixed)
-    // ----------------------------------------------------------------
     questions = questions.sort(() => Math.random() - 0.5);
 
-    // ----------------------------------------------------------------
-    // Response
-    // ----------------------------------------------------------------
-    res.status(200).json({
-        success: true,
-        total: questions.length,
-        languageName,
-        difficulty,
-        mode,
-        timer,
-        questions,
-     });
-
+    res.json({
+      success: true,
+      total: questions.length,
+      questions,
+    });
   } catch (error) {
-    return res.status(500).json({ message: "Server error while fetching questions" });
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// ------------------- SUBMIT CHALLENGE -------------------
+
+const submitChallenge = async (req, res) => {
+  try {
+    const { answers, totalQuestions, totalTimeTaken } = req.body;
+
+    if (!answers || !Array.isArray(answers))
+      return res.status(400).json({ message: "Invalid submission" });
+
+    const questionIds = answers.map((a) => a.questionId);
+
+    const questions = await Questions.find({
+      _id: { $in: questionIds },
+    });
+
+    let correct = 0;
+
+    const detailedResults = answers.map((a) => {
+      const q = questions.find(
+        (q) => q._id.toString() === a.questionId
+      );
+
+      if (!q) return null;
+
+      const isCorrect =
+        q.answer.option === a.selectedOption;
+
+      if (isCorrect) correct++;
+
+      return {
+        questionId: a.questionId,
+        selectedOption: a.selectedOption,
+        correctOption: q.answer.option,
+        explanation: q.answer.explanation,
+        isCorrect,
+      };
+    });
+
+    const wrong = answers.length - correct;
+    const notAttempted = totalQuestions - answers.length;
+
+    const percentage = Math.round((correct / totalQuestions) * 100);
+
+    const avgTimePerQuestion =
+      totalQuestions > 0
+        ? (totalTimeTaken / totalQuestions).toFixed(2)
+        : 0;
+
+    res.json({
+      success: true,
+      correct,
+      wrong,
+      notAttempted,
+      percentage,
+      totalTimeTaken,
+      avgTimePerQuestion,
+      total: totalQuestions,
+      detailedResults,
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Submission failed" });
   }
 };
 
 
-module.exports = { getChallengeQuestions };
+module.exports = {
+  getChallengeQuestions,
+  submitChallenge,
+};

@@ -3,44 +3,24 @@ import axios from "axios";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "./challengeQues.css";
-import { motion } from 'framer-motion';
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import Spinner from "../../loader/spinner";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
+import AllMode from "./AllMode";
+import SoloMode from "./SoloMode";
 
-/**
- * Simplified ChallengeQues.jsx
- * - No session persistence
- * - Uses only fromChallenge flag
- * - Global timer (read from config)
- * - Shows instant answers (correct/wrong + explanation)
- * - At end, only shows Correct/Wrong counts
- */
+const parseAllModeTimer = (difficulty, timerType) => {
+  if (timerType !== "adaptive") return null;
 
-const parseTimerString = (timerStr, difficulty, questionCount) => {
-  if (!timerStr) return 5 * 60;
-  const s = String(timerStr).trim().toLowerCase();
-
-  if (s === "adaptive") {
-    const base = difficulty === "Hard" ? 20 : difficulty === "Medium" ? 15 : 10;
-    return Math.max(30, Math.round(base * (questionCount || 10)));
+  switch (difficulty?.toLowerCase()) {
+    case "easy":
+      return 5 * 60;     // 5 minutes
+    case "medium":
+      return 7 * 60;     // 7 minutes
+    case "hard":
+      return 10 * 60;    // 10 minutes
+    default:
+      return 5 * 60;
   }
-
-  if (s.endsWith("min")) {
-    const n = parseFloat(s.replace("min", ""));
-    if (!isNaN(n)) return Math.round(n * 60);
-  }
-
-  if (s.endsWith("s")) {
-    const n = parseFloat(s.replace("s", ""));
-    if (!isNaN(n)) return Math.round(n);
-  }
-
-  const n = parseFloat(s);
-  if (!isNaN(n)) return Math.round(n);
-
-  return 5 * 60;
 };
 
 const ChallengeQues = () => {
@@ -49,28 +29,63 @@ const ChallengeQues = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const cameFromChallenge = location.state?.fromChallenge;
-  const config = location.state?.config; // { difficulty, questionCount, timer }
+  const config = location.state?.config;
 
   const [questions, setQuestions] = useState([]);
-  const [answers, setAnswers] = useState([]); // {questionId, selectedOption}
+  const [answers, setAnswers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitted, setSubmitted] = useState(false);
-  const [results, setResults] = useState({ correct: 0, wrong: 0 });
+  const [results, setResults] = useState(null);
 
-  const [remaining, setRemaining] = useState(() =>
-    config ? parseTimerString(config.timer, config.difficulty, config.questionCount) : 0
-  );
+  const answersRef = useRef(answers);
+  const submittedRef = useRef(submitted);
+
+  useEffect(() => {
+    answersRef.current = answers;
+  }, [answers]);
+
+  useEffect(() => {
+    submittedRef.current = submitted;
+  }, [submitted]);
+
+  const initialTime = useRef(0);
+
+  const [remaining, setRemaining] = useState(() => {
+    if (!config) return 0;
+
+    if (config.timer === "adaptive" && config.mode === "All") {
+      return parseAllModeTimer(config.difficulty, "adaptive");
+    }
+
+    if (config.timer?.endsWith("min"))
+      return parseInt(config.timer) * 60;
+
+    if (config.timer?.endsWith("s"))
+      return parseInt(config.timer);
+
+    return parseInt(config.timer) || 0;
+  });
+
+  useEffect(() => {
+    if (config?.mode === "All") {
+      initialTime.current = remaining;
+    }
+  }, []);
+
+  const initialTimeRef = useRef(initialTime);
+
   const timerRef = useRef(null);
 
-  // Block direct access
+  // Access Guard useEffect
   useEffect(() => {
-    if (!cameFromChallenge || !config) {
+    const flag = localStorage.getItem("cameFromChallenge");
+
+    if (!flag || !config) {
       navigate("/challenge", { replace: true });
     }
-  }, [cameFromChallenge, config, navigate]);
+  }, [config, navigate]);
 
-  // Fetch questions
+  // Fetch questions (answers NOT included now)
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
@@ -83,16 +98,24 @@ const ChallengeQues = () => {
           difficulty: config?.difficulty,
           questionCount: config?.questionCount,
           mode: "All",
-          timer: config?.timer
+          timer: config?.timer,
         };
 
-        const res = await axiosPrivate.post("/challenge/questions", payload, { signal: controller.signal });
-        if (isMounted) setQuestions(res.data?.questions || []);
+        const res = await axiosPrivate.post(
+          "/challenge/questions",
+          payload,
+          { signal: controller.signal }
+        );
+
+        if (isMounted) {
+          setQuestions(res.data?.questions || []);
+
+          // ✅ Remove flag after successful fetch
+          localStorage.removeItem("cameFromChallenge");
+        }
       } catch (error) {
         if (axios.isCancel(error)) return;
-        if (!error?.response) toast.error("No server response");
-        else if (error.response?.status === 403) toast.error("Session expired!");
-        else toast.error("Failed to load challenge questions");
+        toast.error("Failed to load challenge questions");
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -105,15 +128,20 @@ const ChallengeQues = () => {
     };
   }, [axiosPrivate, language, config]);
 
-  // Global countdown timer
+  // Clean timer (no recreation every second)
   useEffect(() => {
-    if (questions.length === 0 || !remaining || remaining <= 0 || submitted ) return;
+    if (config?.mode !== "All") return;
+    if (questions.length === 0) return;
 
     timerRef.current = setInterval(() => {
       setRemaining((prev) => {
         if (prev <= 1) {
           clearInterval(timerRef.current);
-          finalizeResults(true);
+
+          if (!submittedRef.current) {
+            handleSubmit(true, answersRef.current);
+          }
+
           return 0;
         }
         return prev - 1;
@@ -121,49 +149,68 @@ const ChallengeQues = () => {
     }, 1000);
 
     return () => clearInterval(timerRef.current);
-  }, [remaining, submitted, questions]);    
+  }, [questions.length, config?.mode]);
 
-  // Handle answer select (instant feedback)
+
   const handleSelect = (questionId, option) => {
-    if (answers.find((a) => a.questionId === questionId)) return; // already answered
+    if (submitted) return [];
+
+    let updatedAnswers = [];
 
     setAnswers((prev) => {
-      const updated = [...prev, { questionId, selectedOption: option }];
-      if (updated.length === questions.length) finalizeResults(false, updated);
-      return updated;
+      const existing = prev.find((a) => a.questionId === questionId);
+      if (existing) {
+        updatedAnswers = prev;
+        return prev;
+      }
+
+      updatedAnswers = [...prev, { questionId, selectedOption: option }];
+
+      if (
+        config?.mode === "All" &&
+        updatedAnswers.length === questions.length
+      ) {
+        handleSubmit(false, updatedAnswers);
+      }
+
+      return updatedAnswers;
     });
+
+    return updatedAnswers;
   };
 
-  const finalizeResults = (timeUp = false, latestAnswers = null) => {
-    if (submitted) return;
-    const finalAnswers = latestAnswers || answers;
-    const total = questions.length;
+  const handleSubmit = async (timeUp = false, latestAnswers = null) => {
+    if (submittedRef.current) return;
 
-    let correct = 0;
-    finalAnswers.forEach((a) => {
-      const q = questions.find((q) => q._id === a.questionId);
-      if (q && q.answer && a.selectedOption === q.answer.option) correct++;
-    });
+    const finalAnswers = latestAnswers || answersRef.current;
+    const totalTimeTaken =
+      config?.mode === "All"
+        ? initialTime.current - remaining
+        : 0; // Solo calculates separately
 
-    const wrong = finalAnswers.length - correct;
-    const notAnswered = total - finalAnswers.length;
+    try {
+      const res = await axiosPrivate.post("/challenge/submit", {
+        answers: finalAnswers,
+        totalQuestions: questions.length,
+        totalTimeTaken,
+      });
 
-    setResults({ correct, wrong, notAnswered });
-    setSubmitted(true);
-    clearInterval(timerRef.current);
+      setResults(res.data);
+      setSubmitted(true);
+      clearInterval(timerRef.current);
+    } catch (err) {
+      toast.error("Failed to submit challenge");
+    }
   };
 
-  const handleBack = () => {
-    navigate("/challenge", { replace: true });
-  };
 
   const formatTime = (s) => {
-    const mm = Math.floor(s / 60).toString().padStart(2, "0");
+    const mm = Math.floor(s / 60)
+      .toString()
+      .padStart(2, "0");
     const ss = (s % 60).toString().padStart(2, "0");
     return `${mm}:${ss}`;
   };
-
-  const getAnswer = (id) => answers.find((a) => a.questionId === id);
 
   return (
     <div className="challengeQues-main-container">
@@ -174,96 +221,59 @@ const ChallengeQues = () => {
           {language} ({questions?.length || 0} Questions)
         </h1>
 
-        <div style={{ borderBottom: "1px solid var(--borderbold-color)", width: "65%", margin: "10px auto" }} />
-
         <div className="challengeQues-progress">
           {!submitted ? (
             <>
-              <div>{answers.length}/{questions.length} Answered</div>
-              <div style={{ marginTop: 6 }}>Time left: <strong>{formatTime(remaining)}</strong></div>
+              <div>
+                {answers.length}/{questions.length} Answered
+              </div>
+              {config?.mode == "All" && 
+              <div className="challengeQues-progress-globaltimer">
+                Time left: <strong>{formatTime(remaining)}</strong>
+              </div>}
             </>
           ) : (
-            <div className="challengeQues-top-message">
-              <div className="challengeQues-result">
-                <span>Correct: <span className="challengeQues-correctNo">{results.correct}</span></span>
-                <span>Wrong: <span className="challengeQues-wrongNo">{results.wrong}</span></span>
-                <span>Not Answered: <span className="challengeQues-notAnsweredNo">{results.notAnswered}</span></span>
-              </div>
-              <button className="challengeQues-cancle-btn" onClick={handleBack}>Back</button>
+            <div  className="challengeQues-score">
+              <span>Correct: <span className="challengeQues-correctNo">{results.correct}</span> </span>
+              <span> Wrong: <span className="challengeQues-wrongNo">{results.wrong}</span></span>
+              <span> Not Attempted: <span>{results.notAttempted}</span></span>
+              <span> Score: {results.percentage}%</span>
+              <span>
+                Total Time: {Math.floor(results.totalTimeTaken / 60)}m{" "}
+                {results.totalTimeTaken % 60}s
+              </span>
+              <span>
+                Avg / Question: {results.avgTimePerQuestion}s
+              </span>
             </div>
           )}
         </div>
 
         {loading ? (
-          <div className="challengeQues-spinner-div"><Spinner color="var(--text-color)" /></div>
+          <Spinner />
         ) : (
-          <div className="challengeQues-grid">
-            {questions.map((q, index) => {
-              const answer = getAnswer(q._id);
-              const isAnswered = !!answer;
-              const selected = answer?.selectedOption;
+          <>
+            {config?.mode === "All" && (
+              <AllMode
+                questions={questions}
+                answers={answers}
+                submitted={submitted}
+                results={results}
+                handleSelect={handleSelect}
+              />
+            )}
 
-              return (
-                <div key={q._id} className="challengeQues-question-card">
-                  <div className="challengeQues-questions-div">
-                    <ReactMarkdown
-                      remarkPlugins={[remarkGfm]}
-                      skipHtml={true}
-                      components={{
-                        p: ({ children }) => <div className="challengeQues-paragraph">{children}</div>,
-                        pre: ({ children, ...props }) => <pre className="challengeQues-code-block" {...props}>{children}</pre>,
-                        code: ({ inline, className, children, ...props }) =>
-                          inline
-                            ? <code className="challengeQues-inline-code" {...props}>{children}</code>
-                            : <code className={className} {...props}>{children}</code>,
-                        a: ({ children }) => <span>{children}</span>,
-                      }}
-                    >
-                      {`${index + 1}\\. ${q.question}`}
-                    </ReactMarkdown>
-                  </div>
-
-                  <ul className="challengeQues-options">
-                    {q.options.map((opt, i) => {
-                      const isSelected = selected === opt;
-                      const isCorrect = q.answer && opt === q.answer.option;
-                      const isWrong = isAnswered && isSelected && !isCorrect;
-
-                      let cls = "";
-                      if (isAnswered) {
-                        if (isCorrect) cls = "correct";
-                        else if (isWrong) cls = "wrong";
-                      }
-
-                      return (
-                        <li key={i}>
-                          <label className={`challengeQues-option-label ${cls}`}>
-                            <input
-                              type="radio"
-                              name={`q_${q._id}`}
-                              value={opt}
-                              checked={isSelected}
-                              disabled={isAnswered || submitted}
-                              onChange={() => handleSelect(q._id, opt)}
-                            />
-                            <span className="challengeQues-custom-radio"></span>
-                            <span className="challengeQues-optionName">{opt}</span>
-                          </label>
-                        </li>
-                      );
-                    })}
-                  </ul>
-
-                  {isAnswered && q.answer?.explanation && (
-                    <div className="challengeQues-explaination">
-                      <h3>Explanation:</h3>
-                      <div><ReactMarkdown>{q.answer.explanation}</ReactMarkdown></div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+            {config?.mode === "Solo" && (
+              <SoloMode
+                questions={questions}
+                config={config}
+                submitted={submitted}
+                results={results}
+                handleSelect={handleSelect}
+                handleSubmit={handleSubmit}
+              />
+            )}
+          </>
         )}
       </div>
     </div>
