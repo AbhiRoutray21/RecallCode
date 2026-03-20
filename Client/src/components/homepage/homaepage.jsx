@@ -90,7 +90,7 @@ const Homepage = () => {
                            <motion.div initial={childVariants.hidden} whileInView={childVariants.visible} viewport={{ once: true, margin:'-100px' }} className="feature-card">
                               <span className="icon">📈</span>
                               <h3>Track Progress</h3>
-                              <p>Stay motivated by watching your streaks and skills grow.</p>
+                              <p>Stay motivated by watching your streaks.</p>
                            </motion.div>
                         </div>
                      </motion.div>
